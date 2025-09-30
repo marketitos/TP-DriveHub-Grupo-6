@@ -15,7 +15,10 @@
     "start:dev": "tsc && node ./dist/index.js",
     "test": "npx jest tests --runInBand --detectOpenHandles",
     "prebuild": "npm run clean",
-    "lint-fix": "npx eslint ./src --fix"
+    "lint-fix": "npx eslint ./src --fix",
+    "docs": "typedoc",
+    "docs:watch": "typedoc --watch",
+    "docs:json": "typedoc --json docs.json"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",
