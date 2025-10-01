@@ -15,25 +15,22 @@ abstract class Auto {
     }
 
     // Getters y Setters
-    get nroMatricula(): number { return this._nroMatricula; }
-    set nroMatricula(value: number) { this._nroMatricula = value; }
+    public getNroMatricula(): number { return this._nroMatricula; }
+    public setNroMatricula(value: number) { this._nroMatricula = value; }
 
-    get estado(): ESTADO_VEHICULO { return this._estado; }
-    set estado(value: ESTADO_VEHICULO) { this._estado = value; }
+    public getEstado(): ESTADO_VEHICULO { return this._estado; }
+    public actualizarEstado(value: ESTADO_VEHICULO) { this._estado = value; }
 
-    get tarifa(): number { return this._tarifa; }
-    set tarifa(value: number) { this._tarifa = value; }
+    public getTarifa(): number { return this._tarifa; }
+    public setTarifa(value: number) { this._tarifa = value; }
 
-    get cargoAdicional(): number { return this._cargoAdicional; }
-    set cargoAdicional(value: number) { this._cargoAdicional = value; }
+    public getCargoAdicional(): number { return this._cargoAdicional; }
+    public setCargoAdicional(value: number) { this._cargoAdicional = value; }
 
     // Métodos abstractos
-    abstract aplicarCargo(dias: number): number;
+    abstract aplicarCargo(reserva:Reserva): number;
     abstract calcularBase(reserva: Reserva): number;
 
-    actualizarEstado(): void {
-        console.log(`Estado del auto ${this._nroMatricula} actualizado: ${this._estado}`);
-    }
 }
 
 export default Auto;

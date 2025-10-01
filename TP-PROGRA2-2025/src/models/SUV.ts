@@ -9,19 +9,22 @@ class SUV extends Auto {
         this._cargoFijo = cargoFijo;
     }
 
-    get cargoFijo(): number { return this._cargoFijo; }
-    set cargoFijo(value: number) { this._cargoFijo = value; }
+    public getCargoFijo(): number { return this._cargoFijo; }
+    public setCargoFijo(value: number) { this._cargoFijo = value; }
 
-    override aplicarCargo(dias: number): number {
-        return this._cargoFijo * dias;
+    public aplicarCargo(reserva: Reserva): number {
+        return this._cargoFijo * reserva.getDias();
     }
 
-    override calcularBase(reserva: Reserva): number {
-        const dias = reserva.calcularDiasReserva();
-        return (dias * this.tarifa) + this.aplicarCargo(dias);
-    }
+    public calcularBase(reserva: Reserva): number {
+        let cargoFijoAdicional = this._cargoFijo * 15
 
-    actualizarEstado(): void {}
+        if(reserva.getKilometraje()>500){
+            cargoFijoAdicional += (reserva.getKilometraje() - 500) *0.25
+        }
+
+        return cargoFijoAdicional;
+    }
 
 }
 

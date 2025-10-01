@@ -1,7 +1,7 @@
 import Auto from './Auto';
 import Reserva from './Reserva';
 
-class Sedan extends Auto {
+export default class Sedan extends Auto {
     private _cargoPorKilometro: number;
 
     constructor(nroMatricula: number, estado: any, tarifa: number, cargoPorKilometro: number = 0.5) {
@@ -9,16 +9,18 @@ class Sedan extends Auto {
         this._cargoPorKilometro = cargoPorKilometro;
     }
 
-    get cargoPorKilometro(): number { return this._cargoPorKilometro; }
-    set cargoPorKilometro(value: number) { this._cargoPorKilometro = value; }
+    public getCargoPorKilometro(): number {
+         return this._cargoPorKilometro; 
+        }
+    public setCargoPorKilometro(value: number) {
+         this._cargoPorKilometro = value; 
+        }
 
-    aplicarCargo(dias: number): number {
-        return 0;
+    public aplicarCargo(reserva: Reserva): number {
+        return reserva.getKilometraje()*0.2;
     }
 
-    calcularBase(reserva: Reserva): number {
-        return 0;
+    public calcularBase(reserva: Reserva): number {
+        return this.getTarifa() * reserva.getDias();
     }
 }
-
-export default Sedan;

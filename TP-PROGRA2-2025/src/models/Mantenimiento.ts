@@ -1,4 +1,4 @@
-class Mantenimiento {
+export default class Mantenimiento {
     private _diasMantenimiento: number;
     private _diasLimpieza: number;
     private _costoMantenimiento: number;
@@ -10,18 +10,17 @@ class Mantenimiento {
     }
 
     // Getters y Setters
-    get diasMantenimiento(): number { return this._diasMantenimiento; }
-    set diasMantenimiento(value: number) { this._diasMantenimiento = value; }
+    public getDiasMantenimiento(): number { return this._diasMantenimiento; }
+    public setDiasMantenimiento(value: number) { this._diasMantenimiento = value; }
 
-    get diasLimpieza(): number { return this._diasLimpieza; }
-    set diasLimpieza(value: number) { this._diasLimpieza = value; }
+    public getDiasLimpieza(): number { return this._diasLimpieza; }
+    public setDiasLimpieza(value: number) { this._diasLimpieza = value; }
 
-    get costoMantenimiento(): number { return this._costoMantenimiento; }
-    set costoMantenimiento(value: number) { this._costoMantenimiento = value; }
+    public getCostoMantenimiento(): number { return this._costoMantenimiento; }
+    public setCostoMantenimiento(value: number) { this._costoMantenimiento = value; }
 
-    registrarAuto(): void {
+    public registrarAuto(): void {
         console.log("Auto registrado para mantenimiento");
     }
 }
 
-export default Mantenimiento;

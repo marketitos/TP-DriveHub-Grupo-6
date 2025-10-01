@@ -14,18 +14,18 @@ class Cliente {
     }
 
     // Getters y Setters
-    get legajo(): number { return this._legajo; }
-    set legajo(value: number) { this._legajo = value; }
+    public getLegajo(): number { return this._legajo; }
+    public setLegajo(value: number) { this._legajo = value; }
 
-    get nroReserva(): number { return this._nroReserva; }
-    set nroReserva(value: number) { this._nroReserva = value; }
+    public getNroReserva(): number { return this._nroReserva; }
+    public setNroReserva(value: number) { this._nroReserva = value; }
 
-    get nombre(): string { return this._nombre; }
-    set nombre(value: string) { this._nombre = value; }
+    public getNombre(): string { return this._nombre; }
+    public setNombre(value: string) { this._nombre = value; }
 
-    get reservas(): Reserva[] { return this._reservas; }
+    public getReservas(): Reserva[] { return this._reservas; }
 
-    agregarReserva(reserva: Reserva): void {
+    public agregarReserva(reserva: Reserva): void {
         this._reservas.push(reserva);
         this._nroReserva++;
     }

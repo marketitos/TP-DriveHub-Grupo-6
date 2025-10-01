@@ -28,30 +28,31 @@ class Reserva {
   }
 
   // Getters y Setters
-  get idReserva(): number { return this._idReserva; }
-  set idReserva(value: number) { this._idReserva = value; }
+  public getIdReserva(): number { return this._idReserva; }
+  public setIdReserva(value: number) { this._idReserva = value; }
 
-  get cliente(): Cliente { return this._cliente; }
-  set cliente(value: Cliente) { this._cliente = value; }
+  public getCliente(): Cliente { return this._cliente; }
+  public setCliente(value: Cliente) { this._cliente = value; }
 
-  get fechaInicio(): Date { return this._fechaInicio; }
-  set fechaInicio(value: Date) { this._fechaInicio = value; }
+  public getFechaInicio(): Date { return this._fechaInicio; }
+  public setFechaInicio(value: Date) { this._fechaInicio = value; }
 
-  get fechaFin(): Date { return this._fechaFin; }
-  set fechaFin(value: Date) { this._fechaFin = value; }
+  public getFechaFin(): Date { return this._fechaFin; }
+  public setFechaFin(value: Date) { this._fechaFin = value; }
 
-  get auto(): Auto { return this._auto; }
-  set auto(value: Auto) { this._auto = value; }
+  public getAuto(): Auto { return this._auto; }
+  public setAuto(value: Auto) { this._auto = value; }
 
-  get kilometraje(): number { return this._kilometraje; }
-  set kilometraje(value: number) { this._kilometraje = value; }
+  public getKilometraje(): number { return this._kilometraje; }
+  public setKilometraje(value: number) { this._kilometraje = value; }
 
-  costoTotalReserva(): number {
+  public costoTotalReserva(): number {
     return 0;
   }
 
-  calcularDiasReserva(): number {
-    return 0;
+  public getDias(){
+    let diferenciaDias=this._fechaInicio.getTime() - this._fechaFin.getTime()
+    return (diferenciaDias / (1000 * 60 * 60 * 24)) + 1;
   }
 }
 

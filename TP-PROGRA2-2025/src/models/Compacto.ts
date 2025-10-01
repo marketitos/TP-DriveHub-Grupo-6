@@ -9,15 +9,21 @@ class Compacto extends Auto {
         this._descuentoDia = descuentoDia;
     }
 
-    get descuentoDia(): number { return this._descuentoDia; }
-    set descuentoDia(value: number) { this._descuentoDia = value; }
+    public getDescuentoDia(): number { return this._descuentoDia; }
+    public setDescuentoDia(value: number) { this._descuentoDia = value; }
 
-    aplicarCargo(dias: number): number {
-        return 0;
+    public aplicarCargo(reserva:Reserva): number {
+        let kmpordia = 100 * reserva.getDias()
+        let cargoAdicion=0
+        if (reserva.getKilometraje() > kmpordia) {
+            cargoAdicion = (reserva.getKilometraje() - kmpordia) * 0.15
+        }
+
+        return cargoAdicion;
     }
 
-    calcularBase(reserva: Reserva): number {
-        return 0;
+    public calcularBase(reserva: Reserva): number {
+        return this.getTarifa() * reserva.getDias()
     }
 }
 
