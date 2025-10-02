@@ -23,7 +23,7 @@ class Compacto extends Auto {
     }
 
     public calcularBase(reserva: Reserva): number {
-        return this.getTarifa() * reserva.getDias()
+        return (this.getTarifa() * reserva.getDias()+this.aplicarCargo(reserva))
     }
 }
 

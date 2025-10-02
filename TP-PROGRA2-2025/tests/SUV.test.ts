@@ -13,18 +13,18 @@ describe("Tests clase compacto", ()=>{
 
     beforeEach(() =>{
         cliente1= new Cliente(46362499,"Marcos")
-        autoSUV=new SUV(566, ESTADO_VEHICULO.DISPONIBLE,30,50)
+        autoSUV=new SUV(566, ESTADO_VEHICULO.DISPONIBLE,80,15)
         fechaInicio = new Date("2025-10-01")
         fechaFin = new Date("2025-10-15")
         reserva = new Reserva(1, cliente1,fechaInicio,fechaFin,autoSUV,700)
         
     })
     test('Prueba metodo calcularBase()', () => {
-        expect(autoSUV.calcularBase(reserva)).toEqual(800)    
+        expect(autoSUV.calcularBase(reserva)).toEqual(1475)    
     })
 
     test('Prueba metodo aplicarCargo()', () => {
-        expect(autoSUV.aplicarCargo(reserva)).toEqual(750)
+        expect(autoSUV.aplicarCargo(reserva)).toEqual(275)
     })
     
 })

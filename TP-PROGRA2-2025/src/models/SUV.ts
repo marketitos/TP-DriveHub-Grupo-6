@@ -12,12 +12,12 @@ class SUV extends Auto {
     public getCargoFijo(): number { return this._cargoFijo; }
     public setCargoFijo(value: number) { this._cargoFijo = value; }
 
-    public aplicarCargo(reserva: Reserva): number {
-        return this._cargoFijo * reserva.getDias();
+    public calcularBase(reserva: Reserva): number {
+        return (this.getTarifa() * reserva.getDias()) + this.aplicarCargo(reserva);
     }
 
-    public calcularBase(reserva: Reserva): number {
-        let cargoFijoAdicional = this._cargoFijo * 15
+    public aplicarCargo(reserva: Reserva): number {
+        let cargoFijoAdicional = reserva.getDias() * this._cargoFijo
 
         if(reserva.getKilometraje()>500){
             cargoFijoAdicional += (reserva.getKilometraje() - 500) *0.25

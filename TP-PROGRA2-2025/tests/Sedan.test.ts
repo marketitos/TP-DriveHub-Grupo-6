@@ -20,7 +20,8 @@ describe("Tests clase compacto", ()=>{
         
     })
     test('Prueba metodo calcularBase()', () => {
-        expect(autoSedan.calcularBase(reserva)).toEqual(450)
+        
+        expect(autoSedan.calcularBase(reserva)).toEqual(590)
     })
 
     test('Prueba metodo aplicarCargo()', () => {
