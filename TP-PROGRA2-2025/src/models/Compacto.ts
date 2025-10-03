@@ -2,15 +2,10 @@ import Auto from './Auto';
 import Reserva from './Reserva';
 
 class Compacto extends Auto {
-    private _descuentoDia: number;
 
     constructor(nroMatricula: number, estado: any, tarifa: number, descuentoDia: number = 0.1) {
         super(nroMatricula, estado, tarifa);
-        this._descuentoDia = descuentoDia;
     }
-
-    public getDescuentoDia(): number { return this._descuentoDia; }
-    public setDescuentoDia(value: number) { this._descuentoDia = value; }
 
     public aplicarCargo(reserva:Reserva): number {
         let kmpordia = 100 * reserva.getDias()

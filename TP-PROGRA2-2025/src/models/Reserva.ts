@@ -50,7 +50,7 @@ class Reserva {
     return 0;
   }
 
-  public getDias(){
+  public getDias():number{
     let diferenciaDias= this._fechaFin.getTime() - this._fechaInicio.getTime()
     return (diferenciaDias / (1000 * 60 * 60 * 24)) + 1;
   }

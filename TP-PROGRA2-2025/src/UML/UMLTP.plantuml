@@ -26,7 +26,7 @@ class Reserva{
 
     + getters y setters ()
     + costoTotalReserva():number
-    + calcularDiasReserva():Date
+    + getDias():number
 }
 
 
@@ -87,19 +87,6 @@ enum ESTADO_VEHICULO{
 }
 
 
-
-
-
-note right of ESTADO_VEHICULO{
-    Mantenimiento
-     diasMantenimiento:number
-     diasLimpieza:number
-     costoMantenimiento:number
-
-     getters y setters ()
-     registrarAuto()
-
-}
 
 Reserva --o Auto
 

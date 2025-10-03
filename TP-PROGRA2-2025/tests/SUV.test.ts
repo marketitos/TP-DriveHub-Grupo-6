@@ -1,6 +1,5 @@
 import ESTADO_VEHICULO from "../src/enums/ESTADO_VEHICULO"
 import Cliente from "../src/models/Cliente"
-import Compacto from "../src/models/Compacto"
 import Reserva from "../src/models/Reserva"
 import SUV from "../src/models/SUV"
 
