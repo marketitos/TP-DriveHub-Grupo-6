@@ -4,7 +4,7 @@
     "module": "commonjs",
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./",
+    "rootDir": "./src",
     "removeComments": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -20,7 +20,7 @@
   },
   "include": [
     "src/**/*"
-    , "tests/Auto.test.ts", "tests/Cliente.test.ts", "tests/Compacto.test.ts", "tests/ESTADO_VEHICULO.test.ts", "tests/Mantenimiento.test.ts", "tests/Reserva.test.ts", "tests/Sedan.test.ts", "tests/SistemaDeReserva.test.ts", "tests/SUV.test.ts"  ],
+  ],
   "exclude": [
     "dist",
     "node_modules",
