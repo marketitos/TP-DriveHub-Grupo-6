@@ -27,4 +27,5 @@ describe("Tests clase compacto", ()=>{
         expect(autoSUV.aplicarCargo(reserva)).toEqual(275)
     })
     
+    
 })

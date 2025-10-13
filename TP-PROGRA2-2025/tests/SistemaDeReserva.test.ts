@@ -3,7 +3,7 @@ import Cliente from '../src/models/Cliente';
 import SUV from '../src/models/SUV';
 import Reserva from '../src/models/Reserva';
 import ESTADO_VEHICULO from '../src/enums/ESTADO_VEHICULO';
-import { describe, expect, test, beforeEach } from '@jest/globals';
+
 
 describe('SistemaDeReserva', () => {
   let sistema: SistemaDeReserva;
