@@ -26,5 +26,11 @@ describe("Tests clase compacto", ()=>{
     test('Prueba metodo aplicarCargo()', () => {
         expect(autoSedan.aplicarCargo(reserva)).toEqual(140)
     })
+
+    test('Prueba metodo setCargoPorKilometro', () => {
+      autoSedan.setCargoPorKilometro(50)
+      expect(autoSedan.getCargoPorKilometro()).toEqual(50)
+    })
+    
     
 })
