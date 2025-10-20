@@ -4,9 +4,10 @@ class SistemaDeReserva{
     - Autos:Auto []
     - clientes: Cliente[]
     - Reservas: Reserva []
+    - depEstadistica: Estadistica
 
     + crearReserva(cliente:Cliente, auto:Auto ,fechaInicio:Date, fechaFin:Date):void
-    + verificarDisponibilidad():void
+    + verificarDisponibilidad(a:auto):void
     + agregarAuto(a:Auto):void
     + eliminarAuto(nroMatricula:number):void
     + agregarCliente(c:Cliente):void
@@ -23,10 +24,18 @@ class Reserva{
     - fechaFin:Date
     - Auto:Auto 
     - kilometraje:number 
+    - temporada:Temporadas
 
     + getters y setters ()
     + costoTotalReserva():number
     + getDias():number
+    + obtenerTarifaDiaria():float
+}
+
+note left of Reserva{
+    obtenerTarifaDiaria(): Dentro de este metodo se llamaria
+    a la funcion calcularBase() del auto 
+    y luego se ajustaria este precio segun la temporada 
 }
 
 
@@ -35,11 +44,16 @@ abstract class Auto{
     - estado: ESTADO
     - tarifa: number
     - cargoAdicional: number
+    - kmDesdeUltMantenimiento:number
+    - fechaUltMantenimiento:Date
+    - alquileresCompletados:number
 
     + getters y setters ()
     + aplicarCargo(dias:number):number
     + calcularBase(r:Reserva):number
     + actualizarEstado():void
+    + necesitaMantenimiento():boolean
+    + realizarMantenimiento():void
 }
 class Compacto extends Auto{
 }
@@ -50,24 +64,16 @@ class SUV extends Auto{
     - cargoFijo:number
 }
 
-note right of Auto{
-    calcularBase(r:Reserva)
-        lo que haria seria obtener los dias de la reserva con el metodo  calcularDiasReserva()
-        y multiplicaria los dias por 100 que son los kilometros
+class Estadistica{
+    - sistema: SistemaDeReserva
 
-        despues con el get de kilometraje en reserva preguntaria si el kilometraje es > a el resultado anterior
-        que reste esos valores y el resultado multiplicarlo por 0.15
+    + obtenerVehiculoMasAlquilado(fechaInicio:Date, fechaFin:Date):Auto
+    + obtenerVehiculoMenosAlquilado(fechaInicio:Date, fechaFin:Date):Auto
+    + calcularVehiculoMayorRentabilidad():Auto
+    + calcularVehiculoMenorRentabilidad():Auto
+    + ocupacionFlota():number
+
 }
-
-
-
-note left of Auto{
-    calcularBase()
-        Calcular los dias de alquiler atravez de la reserva y multiplicar esto por su tarifa
-        (FechaInicio-FechaFin)*tarifaBase
-    
-}
-
 
 class Cliente{
     - legajo:number
@@ -86,13 +92,33 @@ enum ESTADO_VEHICULO{
     Limpieza:String
 }
 
+class Temporadas{
+    - tarifaBaseDiaria:float
 
+    + setter()
+    + getTarifaBaseDiaria():float
+}
+
+note right of Temporadas{
+    Como determina fecha inicio si es baja/media/alta
+}
+
+class Baja extends Temporadas{
+}
+class Media extends Temporadas{
+}
+class Alta extends Temporadas{
+}
+
+Temporadas -left-o Reserva
 
 Reserva --o Auto
 
 Reserva --o Cliente
 
 Reserva -up-* SistemaDeReserva
+
+SistemaDeReserva o-left- Estadistica
 
 
 @enduml
