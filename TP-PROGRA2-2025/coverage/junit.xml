@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="6" failures="0" errors="0" time="4.942">
+  <testsuite name="Tests clase compacto" errors="0" failures="0" skipped="0" timestamp="2025-10-03T00:26:54" time="4.333" tests="2">
+    <testcase classname="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" name="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" time="0.008">
+    </testcase>
+    <testcase classname="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" name="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Tests clase compacto" errors="0" failures="0" skipped="0" timestamp="2025-10-03T00:26:54" time="4.33" tests="2">
+    <testcase classname="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" name="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" time="0.008">
+    </testcase>
+    <testcase classname="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" name="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Tests clase compacto" errors="0" failures="0" skipped="0" timestamp="2025-10-03T00:26:54" time="4.322" tests="2">
+    <testcase classname="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" name="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" time="0.008">
+    </testcase>
+    <testcase classname="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" name="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" time="0">
+    </testcase>
+  </testsuite>
+</testsuites>
