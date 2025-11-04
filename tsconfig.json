@@ -16,7 +16,9 @@
     "types": [
       "node",
       "jest"
-    ]
+    ],
+    "checkJs": true,
+    "strictFunctionTypes": true
   },
   "include": [
     "src/**/*"
