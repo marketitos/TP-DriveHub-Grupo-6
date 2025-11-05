@@ -6,7 +6,7 @@ import ESTADO_VEHICULO from '../src/enums/ESTADO_VEHICULO';
 describe('Reserva', () => {
   test('constructor y getters/setters funcionan correctamente', () => {
     const cliente = new Cliente(5, 'Test');
-  const auto = new Compacto(111, ESTADO_VEHICULO.DISPONIBLE, 100);
+    const auto = new Compacto(111, ESTADO_VEHICULO.DISPONIBLE, 100);
     const inicio = new Date(2025, 0, 1);
     const fin = new Date(2025, 0, 1);
 
@@ -29,7 +29,7 @@ describe('Reserva', () => {
 
   test('getDias calcula correctamente (incluye ambos días)', () => {
     const cliente = new Cliente(1, 'A');
-  const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
+    const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
     const inicio = new Date(2025, 0, 1);
 
     // mismo día -> 1
@@ -50,7 +50,7 @@ describe('Reserva', () => {
 
   test('costoTotalReserva por ahora devuelve 0 (stub)', () => {
     const cliente = new Cliente(1, 'A');
-  const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
+    const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
     const inicio = new Date(2025, 0, 1);
     const fin = new Date(2025, 0, 2);
 
