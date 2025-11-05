@@ -2,6 +2,7 @@ import ESTADO_VEHICULO from "../src/enums/ESTADO_VEHICULO"
 import Cliente from "../src/models/Cliente"
 import Reserva from "../src/models/Reserva"
 import Sedan from "../src/models/Sedan"
+import Alta from "../src/models/Alta"
 
 describe("Tests clase compacto", ()=>{
     let cliente1: Cliente;

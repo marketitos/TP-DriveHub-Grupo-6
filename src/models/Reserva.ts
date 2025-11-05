@@ -1,5 +1,6 @@
 import Auto  from './Auto';
 import Cliente  from './Cliente';
+import Temporadas from './Temporadas';
 
 class Reserva {
   // Propiedades privadas
@@ -9,6 +10,7 @@ class Reserva {
   private _fechaFin: Date;
   private _auto: Auto;
   private _kilometraje: number;
+ // private _temporada: Temporadas
 
   // Constructor
   constructor(
@@ -17,7 +19,8 @@ class Reserva {
     fechaInicio: Date,
     fechaFin: Date,
     auto: Auto,
-    kilometraje: number
+    kilometraje: number,
+  //  temporada: Temporadas
   ) {
     this._idReserva = idReserva;
     this._cliente = cliente;
@@ -25,6 +28,7 @@ class Reserva {
     this._fechaFin = fechaFin;
     this._auto = auto;
     this._kilometraje = kilometraje;
+   // this._temporada = temporada;
   }
 
   // Getters y Setters
@@ -54,6 +58,10 @@ class Reserva {
     let diferenciaDias= this._fechaFin.getTime() - this._fechaInicio.getTime()
     return (diferenciaDias / (1000 * 60 * 60 * 24)) + 1;
   }
+
+  /*public obtenerTarifaDiaria():number{
+    return this._auto.calcularBase() * this._temporada.getTarifaBaseDiaria(); // Falta reserva?
+  }*/
 }
 
 export default Reserva;

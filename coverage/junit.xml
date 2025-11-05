@@ -1,23 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="14" failures="0" errors="0" time="7.651">
-  <testsuite name="Tests clase compacto" errors="0" failures="0" skipped="0" timestamp="2025-11-04T23:32:25" time="6.247" tests="2">
-    <testcase classname="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" name="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" time="0.023">
-    </testcase>
-    <testcase classname="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" name="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" time="0.005">
-    </testcase>
-  </testsuite>
-  <testsuite name="Tests clase compacto" errors="0" failures="0" skipped="0" timestamp="2025-11-04T23:32:25" time="6.303" tests="2">
-    <testcase classname="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" name="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" time="0.023">
+<testsuites name="jest tests" tests="23" failures="0" errors="0" time="5.895">
+  <testsuite name="Tests clase compacto" errors="0" failures="0" skipped="0" timestamp="2025-11-05T13:08:10" time="4.743" tests="2">
+    <testcase classname="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" name="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" time="0.013">
     </testcase>
     <testcase classname="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" name="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="SistemaDeReserva" errors="0" failures="0" skipped="0" timestamp="2025-11-04T23:32:25" time="6.361" tests="7">
-    <testcase classname="SistemaDeReserva Constructor debe inicializar con arrays vacíos debe inicializar con arrays vacíos" name="SistemaDeReserva Constructor debe inicializar con arrays vacíos debe inicializar con arrays vacíos" time="0.02">
+  <testsuite name="Auto (vía Compacto)" errors="0" failures="0" skipped="0" timestamp="2025-11-05T13:08:10" time="4.801" tests="3">
+    <testcase classname="Auto (vía Compacto) getters y setters heredados de Auto funcionan correctamente getters y setters heredados de Auto funcionan correctamente" name="Auto (vía Compacto) getters y setters heredados de Auto funcionan correctamente getters y setters heredados de Auto funcionan correctamente" time="0.012">
+    </testcase>
+    <testcase classname="Auto (vía Compacto) aplicarCargo devuelve 0 cuando kilometraje dentro del tope aplicarCargo devuelve 0 cuando kilometraje dentro del tope" name="Auto (vía Compacto) aplicarCargo devuelve 0 cuando kilometraje dentro del tope aplicarCargo devuelve 0 cuando kilometraje dentro del tope" time="0.001">
+    </testcase>
+    <testcase classname="Auto (vía Compacto) aplicarCargo calcula cargo por exceso de km y calcularBase suma tarifa + cargo aplicarCargo calcula cargo por exceso de km y calcularBase suma tarifa + cargo" name="Auto (vía Compacto) aplicarCargo calcula cargo por exceso de km y calcularBase suma tarifa + cargo aplicarCargo calcula cargo por exceso de km y calcularBase suma tarifa + cargo" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="Tests clase compacto" errors="0" failures="0" skipped="0" timestamp="2025-11-05T13:08:10" time="4.861" tests="3">
+    <testcase classname="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" name="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" time="0.026">
+    </testcase>
+    <testcase classname="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" name="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" time="0">
+    </testcase>
+    <testcase classname="Tests clase compacto Prueba metodo getCargoFijo Prueba metodo getCargoFijo" name="Tests clase compacto Prueba metodo getCargoFijo Prueba metodo getCargoFijo" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Reserva" errors="0" failures="0" skipped="0" timestamp="2025-11-05T13:08:10" time="4.876" tests="3">
+    <testcase classname="Reserva constructor y getters/setters funcionan correctamente constructor y getters/setters funcionan correctamente" name="Reserva constructor y getters/setters funcionan correctamente constructor y getters/setters funcionan correctamente" time="0.015">
+    </testcase>
+    <testcase classname="Reserva getDias calcula correctamente (incluye ambos días) getDias calcula correctamente (incluye ambos días)" name="Reserva getDias calcula correctamente (incluye ambos días) getDias calcula correctamente (incluye ambos días)" time="0.002">
+    </testcase>
+    <testcase classname="Reserva costoTotalReserva por ahora devuelve 0 (stub) costoTotalReserva por ahora devuelve 0 (stub)" name="Reserva costoTotalReserva por ahora devuelve 0 (stub) costoTotalReserva por ahora devuelve 0 (stub)" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="SistemaDeReserva" errors="0" failures="0" skipped="0" timestamp="2025-11-05T13:08:10" time="4.914" tests="7">
+    <testcase classname="SistemaDeReserva Constructor debe inicializar con arrays vacíos debe inicializar con arrays vacíos" name="SistemaDeReserva Constructor debe inicializar con arrays vacíos debe inicializar con arrays vacíos" time="0.017">
     </testcase>
     <testcase classname="SistemaDeReserva Gestión de Autos debe agregar y eliminar autos correctamente debe agregar y eliminar autos correctamente" name="SistemaDeReserva Gestión de Autos debe agregar y eliminar autos correctamente debe agregar y eliminar autos correctamente" time="0.001">
     </testcase>
-    <testcase classname="SistemaDeReserva Gestión de Clientes debe agregar y eliminar clientes correctamente debe agregar y eliminar clientes correctamente" name="SistemaDeReserva Gestión de Clientes debe agregar y eliminar clientes correctamente debe agregar y eliminar clientes correctamente" time="0">
+    <testcase classname="SistemaDeReserva Gestión de Clientes debe agregar y eliminar clientes correctamente debe agregar y eliminar clientes correctamente" name="SistemaDeReserva Gestión de Clientes debe agregar y eliminar clientes correctamente debe agregar y eliminar clientes correctamente" time="0.001">
     </testcase>
     <testcase classname="SistemaDeReserva Gestión de Reservas debe crear reservas correctamente debe crear reservas correctamente" name="SistemaDeReserva Gestión de Reservas debe crear reservas correctamente debe crear reservas correctamente" time="0">
     </testcase>
@@ -25,15 +43,21 @@
     </testcase>
     <testcase classname="SistemaDeReserva Métodos varios verificarDisponibilidad debe retornar false verificarDisponibilidad debe retornar false" name="SistemaDeReserva Métodos varios verificarDisponibilidad debe retornar false verificarDisponibilidad debe retornar false" time="0.001">
     </testcase>
-    <testcase classname="SistemaDeReserva Métodos varios getters deben retornar arrays getters deben retornar arrays" name="SistemaDeReserva Métodos varios getters deben retornar arrays getters deben retornar arrays" time="0.001">
+    <testcase classname="SistemaDeReserva Métodos varios getters deben retornar arrays getters deben retornar arrays" name="SistemaDeReserva Métodos varios getters deben retornar arrays getters deben retornar arrays" time="0.002">
     </testcase>
   </testsuite>
-  <testsuite name="Tests clase compacto" errors="0" failures="0" skipped="0" timestamp="2025-11-04T23:32:25" time="6.434" tests="3">
-    <testcase classname="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" name="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" time="0.01">
+  <testsuite name="Cliente" errors="0" failures="0" skipped="0" timestamp="2025-11-05T13:08:10" time="4.99" tests="3">
+    <testcase classname="Cliente constructor inicializa correctamente constructor inicializa correctamente" name="Cliente constructor inicializa correctamente constructor inicializa correctamente" time="0.042">
     </testcase>
-    <testcase classname="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" name="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" time="0.001">
+    <testcase classname="Cliente setters actualizan valores setters actualizan valores" name="Cliente setters actualizan valores setters actualizan valores" time="0.001">
     </testcase>
-    <testcase classname="Tests clase compacto Prueba metodo getCargoFijo Prueba metodo getCargoFijo" name="Tests clase compacto Prueba metodo getCargoFijo Prueba metodo getCargoFijo" time="0">
+    <testcase classname="Cliente agregarReserva agrega la reserva y aumenta nroReserva agregarReserva agrega la reserva y aumenta nroReserva" name="Cliente agregarReserva agrega la reserva y aumenta nroReserva agregarReserva agrega la reserva y aumenta nroReserva" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="Tests clase compacto" errors="0" failures="0" skipped="0" timestamp="2025-11-05T13:08:10" time="5.087" tests="2">
+    <testcase classname="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" name="Tests clase compacto Prueba metodo calcularBase() Prueba metodo calcularBase()" time="0.009">
+    </testcase>
+    <testcase classname="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" name="Tests clase compacto Prueba metodo aplicarCargo() Prueba metodo aplicarCargo()" time="0">
     </testcase>
   </testsuite>
 </testsuites>
