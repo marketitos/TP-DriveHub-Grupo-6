@@ -1,0 +1,148 @@
+@startuml TP-Integrador
+
+class SistemaDeReserva{
+    - Autos:Auto []
+    - clientes: Cliente[]
+    - Reservas: Reserva []
+    - depEstadistica: Estadistica
+
+    + crearReserva(cliente:Cliente, auto:Auto ,fechaInicio:Date, fechaFin:Date):void
+    + verificarDisponibilidad(a: Auto, fechaInicio: Date, fechaFin: Date):void 
+    + agregarAuto(a:Auto):void
+    + eliminarAuto(nroMatricula:number):void
+    + agregarCliente(c:Cliente):void
+    + eliminarCliente(legajo:number):void
+    + agregarReserva(r:Reserva):void
+    + eliminarReserva(idReserva:number):void
+}
+
+
+
+
+class Reserva{
+    - idReserva:number
+    - cliente:Cliente
+    - fechaInicio:Date
+    - fechaFin:Date
+    - Auto:Auto 
+    - kilometraje:number 
+    - temporada:Temporadas
+
+    + getters y setters ()
+    + costoTotalReserva():number
+    + getDias():number
+    + obtenerTarifaDiaria():float
+}
+
+note left of Reserva{
+    obtenerTarifaDiaria(): Dentro de este metodo se llamaria
+    a la funcion calcularBase() del auto 
+    y luego se ajustaria este precio segun la temporada 
+}
+
+
+
+
+abstract class Auto{
+    - nroMatricula:number
+    - estado: IEstado_Actual
+    - tarifa: number
+    - cargoAdicional: number
+    - kmDesdeUltMantenimiento:number
+    - fechaUltMantenimiento:Date
+    - alquileresCompletados:number
+
+    + getters y setters ()
+    + aplicarCargo(dias:number):number
+    + calcularBase(r:Reserva):number
+    + actualizarEstado():void
+    + necesitaMantenimiento():boolean
+    + realizarMantenimiento():void
+    + puedeAlquilarse(e:IEstado_Actual):void
+}
+class Compacto extends Auto{
+}
+class Sedan extends Auto{
+}
+
+class SUV extends Auto{
+    - cargoFijo:number
+}
+
+class Estadistica{
+    - sistema: SistemaDeReserva
+
+    + obtenerVehiculoMasAlquilado(fechaInicio:Date, fechaFin:Date):Auto
+    + obtenerVehiculoMenosAlquilado(fechaInicio:Date, fechaFin:Date):Auto
+    + calcularVehiculoMayorRentabilidad():Auto
+    + calcularVehiculoMenorRentabilidad():Auto
+    + ocupacionFlota():number
+
+}
+
+class Cliente{
+    - legajo:number
+    - nroReserva:number
+    - nombre:String
+    - reservas:Reserva []
+
+    + getters y setters ()
+    + agregarReserva(r:Reserva):void
+}
+
+enum ESTADO_VEHICULO{
+    DISPONIBLE: String
+    EnAlquiler:String
+    Mantenimiento:String
+    Limpieza:String
+}
+
+class Temporadas{
+    - tarifaBaseDiaria:float
+
+    + setter()
+    + getTarifaBaseDiaria():float
+}
+
+note right of Temporadas{
+    Como determina fecha inicio si es baja/media/alta
+}
+
+class Baja extends Temporadas{
+}
+class Media extends Temporadas{
+}
+class Alta extends Temporadas{
+}
+
+interface IEstado_Actual{
+    + puedeAlquilarse(a:auto):void
+}
+
+class estadoDisponible implements IEstado_Actual{
+    - estado : ESTADO_VEHICULO
+}
+class estadoEnAlquiler implements IEstado_Actual{
+    - estado : ESTADO_VEHICULO
+}
+class estadoEnMantenimiento implements IEstado_Actual{
+    - estado : ESTADO_VEHICULO
+}
+class estadoEnLimpieza implements IEstado_Actual{
+    - estado : ESTADO_VEHICULO
+}
+
+Temporadas -left-o Reserva
+
+Reserva --o Auto
+
+Reserva --o Cliente
+
+Reserva -up-* SistemaDeReserva
+
+SistemaDeReserva o-left- Estadistica
+
+Auto -left->IEstado_Actual
+
+
+@enduml
