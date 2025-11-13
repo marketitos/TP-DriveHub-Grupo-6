@@ -1,4 +1,5 @@
 import ESTADO_VEHICULO from '../enums/ESTADO_VEHICULO';
+import { EstadoActual } from './EstadoActual';
 import Reserva from './Reserva';
 
 /**
@@ -8,9 +9,13 @@ import Reserva from './Reserva';
  */
 abstract class Auto {
     private _nroMatricula: number;
-    private _estado: ESTADO_VEHICULO;
+    private _estado: EstadoActual;
     private _tarifa: number;
     private _cargoAdicional: number;
+    private _kmDesdeUltimoMantenimiento: number;
+    private _fechaUltMantenimiento: Date;
+    private alquileresCompletados:number;
+
 
     /**
      * Crea una instancia base de Auto.
@@ -19,11 +24,14 @@ abstract class Auto {
      * @param {number} tarifa - Tarifa diaria base.
      * @param {number} [cargoAdicional=0] - Cargo adicional por defecto.
      */
-    constructor(nroMatricula: number, estado: ESTADO_VEHICULO, tarifa: number, cargoAdicional: number = 0) {
+    constructor(nroMatricula: number, estado: EstadoActual, tarifa: number, cargoAdicional: number = 0, kmDesdeUltimoMantenimiento: number, fechaUltMantenimiento: Date, alquileresCompletados: number) {
         this._nroMatricula = nroMatricula;
         this._estado = estado;
         this._tarifa = tarifa;
         this._cargoAdicional = cargoAdicional;
+        this._kmDesdeUltimoMantenimiento = kmDesdeUltimoMantenimiento;
+        this._fechaUltMantenimiento = fechaUltMantenimiento;
+        this.alquileresCompletados = alquileresCompletados;
     }
 
     // Getters y Setters
@@ -43,13 +51,13 @@ abstract class Auto {
      * Obtiene el estado actual del vehículo.
      * @returns {ESTADO_VEHICULO}
      */
-    public getEstado(): ESTADO_VEHICULO { return this._estado; }
+    public getEstado(): EstadoActual { return this._estado; }
 
     /**
      * Actualiza el estado del vehículo.
      * @param {ESTADO_VEHICULO} value
      */
-    public actualizarEstado(value: ESTADO_VEHICULO) { this._estado = value; }
+    public actualizarEstado(value: EstadoActual) { this._estado = value; }
 
     /**
      * Obtiene la tarifa diaria base del vehículo.
@@ -89,6 +97,37 @@ abstract class Auto {
      * @returns {number} Costo base calculado.
      */
     abstract calcularBase(reserva: Reserva): number;
+
+    public getKmDesdeUltimoMantenimiento(): number {
+        return this._kmDesdeUltimoMantenimiento;
+    }
+    public setKmDesdeUltimoMantenimiento(value: number) {
+        this._kmDesdeUltimoMantenimiento = value;
+    }
+
+    public getFechaUltMantenimiento(): Date {
+        return this._fechaUltMantenimiento;
+    }
+
+    public setFechaUltMantenimiento(value: Date) {
+        this._fechaUltMantenimiento = value;
+    }
+
+    public getAlquileresCompletados(): number {
+        return this.alquileresCompletados;
+    }
+
+    public setAlquileresCompletados(value: number) {
+        this.alquileresCompletados = value;
+    }
+
+    puedeAlquilarse(e:EstadoActual): void {
+        try{
+            this.actualizarEstado(e)
+        }catch(error){
+            throw error;
+        }
+    }
 
 }
 

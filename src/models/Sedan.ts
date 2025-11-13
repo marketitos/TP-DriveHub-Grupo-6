@@ -15,8 +15,8 @@ export default class Sedan extends Auto {
      * @param {number} tarifa - Tarifa diaria base del vehículo.
      * @param {number} [cargoPorKilometro=0.5] - Cargo por kilómetro (valor por defecto si no se provee).
      */
-    constructor(nroMatricula: number, estado: any, tarifa: number, cargoPorKilometro: number = 0.5) {
-        super(nroMatricula, estado, tarifa);
+    constructor(nroMatricula: number, estado: any, tarifa: number, cargoPorKilometro: number = 0.5, kmDesdeUltimoMantenimiento: number = 0, fechaUltMantenimiento: Date = new Date(), alquileresCompletados: number = 0) {
+        super(nroMatricula, estado, tarifa, 0, kmDesdeUltimoMantenimiento, fechaUltMantenimiento, alquileresCompletados);
         this._cargoPorKilometro = cargoPorKilometro;
     }
 

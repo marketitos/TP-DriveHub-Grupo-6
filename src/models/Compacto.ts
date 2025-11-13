@@ -12,10 +12,9 @@ class Compacto extends Auto {
      * @param {number} nroMatricula - Número de matrícula del vehículo.
      * @param {any} estado - Estado inicial del vehículo (usar el enum ESTADO_VEHICULO del proyecto).
      * @param {number} tarifa - Tarifa diaria base del vehículo.
-     * @param {number} [descuentoDia=0.1] - (Parámetro presente en la firma, actualmente no aplicado.)
      */
-    constructor(nroMatricula: number, estado: any, tarifa: number, descuentoDia: number = 0.1) {
-        super(nroMatricula, estado, tarifa);
+    constructor(nroMatricula: number, estado: any, tarifa: number) {
+        super(nroMatricula, estado, tarifa, 0, 0, new Date(), 0);
     }
 
     /**

@@ -16,7 +16,7 @@ describe("Tests clase compacto", ()=>{
         autoSedan = new Sedan(566, ESTADO_VEHICULO.DISPONIBLE,30)
         fechaInicio = new Date("2025-10-01")
         fechaFin = new Date("2025-10-15")
-        reserva = new Reserva(1, cliente1,fechaInicio,fechaFin,autoSedan,700)
+        reserva = new Reserva(1, cliente1,fechaInicio,fechaFin,autoSedan,700, new Alta())
         
     })
     test('Prueba metodo calcularBase()', () => {
@@ -27,5 +27,10 @@ describe("Tests clase compacto", ()=>{
     test('Prueba metodo aplicarCargo()', () => {
         expect(autoSedan.aplicarCargo(reserva)).toEqual(140)
     })
-    
+
+    test('Prueba getter y setter de cargoPorKilometro', () => {
+        expect(autoSedan.getCargoPorKilometro()).toEqual(0.5)
+        autoSedan.setCargoPorKilometro(0.8)
+        expect(autoSedan.getCargoPorKilometro()).toEqual(0.8)
+    })
 })

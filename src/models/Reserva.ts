@@ -10,7 +10,7 @@ class Reserva {
   private _fechaFin: Date;
   private _auto: Auto;
   private _kilometraje: number;
- // private _temporada: Temporadas
+  private _temporada: Temporadas;
 
   // Constructor
   constructor(
@@ -20,7 +20,7 @@ class Reserva {
     fechaFin: Date,
     auto: Auto,
     kilometraje: number,
-  //  temporada: Temporadas
+    temporada: Temporadas
   ) {
     this._idReserva = idReserva;
     this._cliente = cliente;
@@ -28,7 +28,7 @@ class Reserva {
     this._fechaFin = fechaFin;
     this._auto = auto;
     this._kilometraje = kilometraje;
-   // this._temporada = temporada;
+    this._temporada = temporada;
   }
 
   // Getters y Setters
@@ -50,18 +50,46 @@ class Reserva {
   public getKilometraje(): number { return this._kilometraje; }
   public setKilometraje(value: number) { this._kilometraje = value; }
 
+  public getTemporada(): Temporadas { return this._temporada; }
+  public setTemporada(value: Temporadas) { this._temporada = value; }
+
+  /**
+   * Calcula el costo total de la reserva aplicando:
+   * 1. La tarifa base del vehículo ajustada por temporada
+   * 2. Los cargos adicionales específicos del tipo de vehículo
+   * @returns {number} Costo total de la reserva
+   */
   public costoTotalReserva(): number {
-    return 0;
+    const tarifaBase = this._auto.getTarifa();
+    const tarifaAjustada = this._temporada.calcularTarifaAjustada(tarifaBase);
+    
+    const tarifaOriginal = this._auto.getTarifa();
+    
+    this._auto.setTarifa(tarifaAjustada);
+    
+    const costoTotal = this._auto.calcularBase(this);
+    
+    this._auto.setTarifa(tarifaOriginal);
+    
+    return costoTotal;
   }
 
+  /**
+   * Calcula la cantidad de días de la reserva
+   * @returns {number} Número de días de la reserva (incluye el día de inicio)
+   */
   public getDias():number{
     let diferenciaDias= this._fechaFin.getTime() - this._fechaInicio.getTime()
     return (diferenciaDias / (1000 * 60 * 60 * 24)) + 1;
   }
 
-  /*public obtenerTarifaDiaria():number{
-    return this._auto.calcularBase() * this._temporada.getTarifaBaseDiaria(); // Falta reserva?
-  }*/
+  /**
+   * Obtiene la tarifa diaria ajustada por temporada
+   * @returns {number} Tarifa diaria del vehículo ajustada según la temporada
+   */
+  public obtenerTarifaDiaria():number{
+    return this._temporada.calcularTarifaAjustada(this._auto.getTarifa());
+  }
 }
 
 export default Reserva;

@@ -36,7 +36,7 @@ describe('Cliente', () => {
 		const fechaInicio = new Date(2025, 0, 1); // 1 Ene 2025
 		const fechaFin = new Date(2025, 0, 2); // 2 Ene 2025
 
-		const reserva1 = new Reserva(1, cliente, fechaInicio, fechaFin, auto, 50);
+		const reserva1 = new Reserva(1, cliente, fechaInicio, fechaFin, auto, 50, temporada);
 
 		expect(cliente.getNroReserva()).toBe(0);
 		cliente.agregarReserva(reserva1);
@@ -45,7 +45,7 @@ describe('Cliente', () => {
 		expect(cliente.getReservas()[0]).toBe(reserva1);
 
 		// agregar una segunda reserva
-		const reserva2 = new Reserva(2, cliente, fechaInicio, fechaFin, auto, 120);
+		const reserva2 = new Reserva(2, cliente, fechaInicio, fechaFin, auto, 120, temporada);
 		cliente.agregarReserva(reserva2);
 		expect(cliente.getNroReserva()).toBe(2);
 		expect(cliente.getReservas()).toHaveLength(2);

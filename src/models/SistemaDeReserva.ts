@@ -53,9 +53,11 @@ export default class SistemaDeReserva {
      * @param {Auto} auto - Auto a reservar
      * @param {Date} fechaInicio - Fecha de inicio de la reserva
      * @param {Date} fechaFin - Fecha de fin de la reserva
+     * @param {number} kilometraje - Kilometraje estimado de la reserva
+     * @param {Temporadas} temporada - Temporada en la que se realiza la reserva
      */
-    public crearReserva(cliente: Cliente, auto: Auto, fechaInicio: Date, fechaFin: Date): void {
-        const nuevaReserva = new Reserva(this._reservas.length + 1, cliente, fechaInicio, fechaFin, auto, 0);
+    public crearReserva(cliente: Cliente, auto: Auto, fechaInicio: Date, fechaFin: Date, kilometraje: number = 0, temporada: any): void {
+        const nuevaReserva = new Reserva(this._reservas.length + 1, cliente, fechaInicio, fechaFin, auto, kilometraje, temporada);
         this._reservas.push(nuevaReserva);
     }
 

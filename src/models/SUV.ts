@@ -15,8 +15,8 @@ class SUV extends Auto {
      * @param {number} tarifa - Tarifa diaria base del vehículo.
      * @param {number} cargoFijo - Cargo fijo por día aplicado a la reserva.
      */
-    constructor(nroMatricula: number, estado: any, tarifa: number, cargoFijo: number) {
-        super(nroMatricula, estado, tarifa);
+    constructor(nroMatricula: number, estado: any, tarifa: number, cargoFijo: number,kmDesdeUltimoMantenimiento:number, fechaUltMantenimiento:Date, alquileresCompletados:number) {
+        super(nroMatricula, estado, tarifa, 0, kmDesdeUltimoMantenimiento, fechaUltMantenimiento, alquileresCompletados);
         this._cargoFijo = cargoFijo;
     }
 

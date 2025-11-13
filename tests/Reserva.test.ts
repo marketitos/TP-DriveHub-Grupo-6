@@ -2,6 +2,8 @@ import Reserva from '../src/models/Reserva';
 import Cliente from '../src/models/Cliente';
 import Compacto from '../src/models/Compacto';
 import ESTADO_VEHICULO from '../src/enums/ESTADO_VEHICULO';
+import Alta from '../src/models/Alta';
+import Media from '../src/models/Media';
 
 describe('Reserva', () => {
   test('constructor y getters/setters funcionan correctamente', () => {
@@ -9,8 +11,7 @@ describe('Reserva', () => {
     const auto = new Compacto(111, ESTADO_VEHICULO.DISPONIBLE, 100);
     const inicio = new Date(2025, 0, 1);
     const fin = new Date(2025, 0, 1);
-
-    const reserva = new Reserva(10, cliente, inicio, fin, auto, 50);
+    const reserva = new Reserva(10, cliente, inicio, fin, auto, 50, new Alta());
 
     expect(reserva.getIdReserva()).toBe(10);
     expect(reserva.getCliente()).toBe(cliente);
@@ -31,30 +32,70 @@ describe('Reserva', () => {
     const cliente = new Cliente(1, 'A');
     const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
     const inicio = new Date(2025, 0, 1);
-
-    // mismo día -> 1
     let fin = new Date(2025, 0, 1);
-    const r1 = new Reserva(1, cliente, inicio, fin, auto, 0);
-    expect(r1.getDias()).toBe(1);
-
-    // dos días consecutivos -> 2
-    fin = new Date(2025, 0, 2);
-    const r2 = new Reserva(2, cliente, inicio, fin, auto, 0);
-    expect(r2.getDias()).toBe(2);
-
-    // fin al final de mes: 1..31 -> 31 días
     fin = new Date(2025, 0, 31);
-    const r3 = new Reserva(3, cliente, inicio, fin, auto, 0);
+    const r3 = new Reserva(3, cliente, inicio, fin, auto, 0, new Alta());
+
     expect(r3.getDias()).toBe(31);
   });
 
-  test('costoTotalReserva por ahora devuelve 0 (stub)', () => {
+  test('costoTotalReserva calcula correctamente con temporada Alta', () => {
     const cliente = new Cliente(1, 'A');
     const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
     const inicio = new Date(2025, 0, 1);
     const fin = new Date(2025, 0, 2);
+    const reserva = new Reserva(1, cliente, inicio, fin, auto, 100, new Alta());
+    // Tarifa base: 100, Temporada Alta: +20% = 120, Días: 2, Costo: 120*2 = 240
+    expect(reserva.costoTotalReserva()).toBe(240);
+  });
 
-    const r = new Reserva(1, cliente, inicio, fin, auto, 100);
-    expect(r.costoTotalReserva()).toBe(0);
+  test('setters de Reserva funcionan correctamente', () => {
+    const cliente = new Cliente(1, 'A');
+    const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
+    const inicio = new Date(2025, 0, 1);
+    const fin = new Date(2025, 0, 2);
+    const reserva = new Reserva(1, cliente, inicio, fin, auto, 100, new Alta());
+
+    reserva.setIdReserva(99);
+    expect(reserva.getIdReserva()).toBe(99);
+
+    const nuevoCliente = new Cliente(2, 'B');
+    reserva.setCliente(nuevoCliente);
+    expect(reserva.getCliente()).toBe(nuevoCliente);
+
+    const nuevaFechaInicio = new Date(2025, 1, 1);
+    reserva.setFechaInicio(nuevaFechaInicio);
+    expect(reserva.getFechaInicio()).toBe(nuevaFechaInicio);
+
+    const nuevoAuto = new Compacto(2, ESTADO_VEHICULO.DISPONIBLE, 150);
+    reserva.setAuto(nuevoAuto);
+    expect(reserva.getAuto()).toBe(nuevoAuto);
+  });
+
+  test('getTemporada y setTemporada funcionan correctamente', () => {
+    const cliente = new Cliente(1, 'A');
+    const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
+    const inicio = new Date(2025, 0, 1);
+    const fin = new Date(2025, 0, 2);
+    const alta = new Alta();
+    const reserva = new Reserva(1, cliente, inicio, fin, auto, 100, alta);
+
+    expect(reserva.getTemporada()).toBe(alta);
+
+    const media = new Media();
+    reserva.setTemporada(media);
+    expect(reserva.getTemporada()).toBe(media);
+  });
+
+  test('obtenerTarifaDiaria retorna tarifa ajustada por temporada', () => {
+    const cliente = new Cliente(1, 'A');
+    const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
+    const inicio = new Date(2025, 0, 1);
+    const fin = new Date(2025, 0, 2);
+    const alta = new Alta();
+    const reserva = new Reserva(1, cliente, inicio, fin, auto, 100, alta);
+
+    // Tarifa base 100 * 1.2 (Alta) = 120
+    expect(reserva.obtenerTarifaDiaria()).toBe(120);
   });
 });

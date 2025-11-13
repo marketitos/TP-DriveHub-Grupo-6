@@ -3,6 +3,7 @@ import Cliente from '../src/models/Cliente';
 import SUV from '../src/models/SUV';
 import Reserva from '../src/models/Reserva';
 import ESTADO_VEHICULO from '../src/enums/ESTADO_VEHICULO';
+import Alta from '../src/models/Alta';
 
 
 describe('SistemaDeReserva', () => {
@@ -15,7 +16,7 @@ describe('SistemaDeReserva', () => {
   beforeEach(() => {
     sistema = new SistemaDeReserva();
     cliente = new Cliente(1, 'Juan Perez');
-    suv = new SUV(123, ESTADO_VEHICULO.DISPONIBLE, 50, 10);
+    suv = new SUV(123, ESTADO_VEHICULO.DISPONIBLE, 50, 10, 0, new Date('2023-01-01'), 0);
     fechaInicio = new Date('2024-01-01');
     fechaFin = new Date('2024-01-10');
   });
@@ -50,12 +51,11 @@ describe('SistemaDeReserva', () => {
 
   describe('Gestión de Reservas', () => {
     test('debe crear reservas correctamente', () => {
-      sistema.crearReserva(cliente, suv, fechaInicio, fechaFin);
+      sistema.crearReserva(cliente, suv, fechaInicio, fechaFin, 0, new Alta());
       expect(sistema.getReservas()).toHaveLength(1);
     });
-
     test('debe agregar y eliminar reservas existentes', () => {
-      const reserva = new Reserva(1, cliente, fechaInicio, fechaFin, suv, 0);
+      const reserva = new Reserva(1, cliente, fechaInicio, fechaFin, suv, 0, new Alta());
       
       sistema.agregarReserva(reserva);
       expect(sistema.getReservas()).toHaveLength(1);
