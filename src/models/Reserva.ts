@@ -60,16 +60,16 @@ class Reserva {
    * @returns {number} Costo total de la reserva
    */
   public costoTotalReserva(): number {
-    const tarifaBase = this._auto.getTarifa();
-    const tarifaAjustada = this._temporada.calcularTarifaAjustada(tarifaBase);
-    
-    const tarifaOriginal = this._auto.getTarifa();
-    
-    this._auto.setTarifa(tarifaAjustada);
-    
-    const costoTotal = this._auto.calcularBase(this);
-    
-    this._auto.setTarifa(tarifaOriginal);
+      const tarifaBase = this._auto.getTarifa();
+      const tarifaAjustada = this._temporada.calcularTarifaAjustada(tarifaBase);
+      
+      const tarifaOriginal = this._auto.getTarifa();
+      
+      this._auto.setTarifa(tarifaAjustada);
+      
+      const costoTotal = this._auto.calcularBase(this);
+      
+      this._auto.setTarifa(tarifaOriginal);
     
     return costoTotal;
   }
