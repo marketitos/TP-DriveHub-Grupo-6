@@ -1,0 +1,38 @@
+# Dependencias
+node_modules/
+package-lock.json
+
+# Archivos de compilación
+dist/
+*.js
+*.js.map
+
+# Archivos de cobertura de tests
+coverage/
+
+# Archivos de configuración del proyecto (mantener en repo)
+# jest.config.js
+# jsdoc.json
+# tsconfig.json
+# package.json
+# README.md
+
+# Logs
+*.log
+npm-debug.log*
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos temporales
+tmp/
+temp/
+*.tmp

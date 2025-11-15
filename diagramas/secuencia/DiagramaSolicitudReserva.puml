@@ -1,0 +1,27 @@
+@startuml Solicitud_de_Reserva
+title Solicitud de Reserva
+
+actor Cliente
+participant "Sistema de reserva" as Sistema
+participant Reserva
+participant Auto
+
+Cliente -> Sistema: Solicitar Reserva
+activate Sistema
+
+Sistema -> Auto: Verificar Disponibilidad
+activate Auto
+
+Auto --> Sistema: Estado : Disponible
+deactivate Auto
+
+Sistema -> Reserva: Crear Reserva
+activate Reserva
+Reserva -> Sistema: Reserva creada
+deactivate Reserva
+
+
+Sistema -> Cliente: Confirmar reserva
+
+deactivate Sistema
+@enduml

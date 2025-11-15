@@ -1,0 +1,26 @@
+@startuml Devolucion_del_Auto
+title Devolucion del Auto
+
+actor Cliente
+participant "Sistema de reserva" as Sistema
+participant Reserva
+participant Auto
+
+Cliente -> Sistema: Devuelve el Auto
+activate Sistema
+
+Sistema -> Auto: Registrar km final
+activate Auto
+
+Sistema -> Reserva: Calcular costo reserva
+activate Reserva
+Reserva --> Sistema: Monto total
+deactivate Reserva
+
+Sistema -> Cliente: Mostrar factura
+
+Sistema -> Auto: Cambiar a estado disponible
+deactivate Auto
+
+deactivate Sistema
+@enduml
