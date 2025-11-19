@@ -90,20 +90,17 @@ export class Estadistica{
         if (rentabilidadTotal.size === 0) {
             return undefined; 
         }
-
        
-        const iteradorEntradas = rentabilidadTotal.entries();
-        const primeraEntrada = iteradorEntradas.next().value;
+        const valoresMapa = rentabilidadTotal.entries();
+        const primeraEntrada = valoresMapa.next().value;
 
         if (!primeraEntrada) {
             return undefined;
         }
-
         let autoMayorRentable: Auto = primeraEntrada[0];
         let maxRentabilidad: number = primeraEntrada[1];
 
-        for (const [auto, rentabilidadActual] of iteradorEntradas) {
-           
+        for (const [auto, rentabilidadActual] of valoresMapa) {
             if (rentabilidadActual > maxRentabilidad) {
                 maxRentabilidad = rentabilidadActual;
                 autoMayorRentable = auto;
@@ -129,8 +126,8 @@ export class Estadistica{
         }
 
     
-        const iteradorEntradas = rentabilidadTotal.entries();
-        const primeraEntrada = iteradorEntradas.next().value;
+        const valoresMapa = rentabilidadTotal.entries();
+        const primeraEntrada = valoresMapa.next().value;
         
         if (!primeraEntrada) {
             return undefined;
@@ -139,9 +136,7 @@ export class Estadistica{
         let autoMenorRentable: Auto = primeraEntrada[0];
         let minRentabilidad: number = primeraEntrada[1];
 
-        // 3. Buscar el Mínimo
-        for (const [auto, rentabilidadActual] of iteradorEntradas) {
-            // La condición para el MENOR es: ¿El valor actual es MÁS PEQUEÑO que el mínimo registrado?
+        for (const [auto, rentabilidadActual] of valoresMapa) {
             if (rentabilidadActual < minRentabilidad) {
                 minRentabilidad = rentabilidadActual;
                 autoMenorRentable = auto;

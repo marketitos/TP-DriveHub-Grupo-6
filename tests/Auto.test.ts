@@ -3,6 +3,7 @@ import Cliente from '../src/models/Cliente';
 import Reserva from '../src/models/Reserva';
 import ESTADO_VEHICULO from '../src/enums/ESTADO_VEHICULO';
 import Alta from '../src/models/Alta';
+import { EstadoDisponible } from '../src/models/estadoDisponible';
 
 describe('Auto (vía Compacto)', () => {
 	test('getters y setters heredados de Auto funcionan correctamente', () => {
@@ -70,4 +71,39 @@ describe('Auto (vía Compacto)', () => {
 		compacto.setAlquileresCompletados(10);
 		expect(compacto.getAlquileresCompletados()).toBe(10);
 	});
+});
+
+describe('necesitaMantenimiento', () => {
+	test('necesitaMantenimiento retorna true cuando km >= 10000', () => {
+		const fechaReciente = new Date();
+		const compacto = new Compacto(123, new EstadoDisponible(), 150, 0, 10000, fechaReciente, 0);
+		expect(compacto.necesitaMantenimiento()).toBe(true);
+	});
+
+	test('necesitaMantenimiento retorna true cuando han pasado 12 meses', () => {
+		const hace13Meses = new Date();
+		hace13Meses.setMonth(hace13Meses.getMonth() - 13);
+		const compacto = new Compacto(123, new EstadoDisponible(), 150, 0, 0, hace13Meses, 0);
+		expect(compacto.necesitaMantenimiento()).toBe(true);
+	});
+
+	test('necesitaMantenimiento retorna true cuando alquileres >= 5', () => {
+		const fechaReciente = new Date();
+		const compacto = new Compacto(123, new EstadoDisponible(), 150, 0, 0, fechaReciente, 5);
+		expect(compacto.necesitaMantenimiento()).toBe(true);
+	});
+
+	test('realizarMantenimiento ', () => {
+		const compacto = new Compacto(123, new EstadoDisponible(), 150, 0, 11000, new Date(), 3);
+		
+		expect(compacto.necesitaMantenimiento()).toBe(true);
+		
+		compacto.realizarMantenimiento();
+		
+		expect(compacto.necesitaMantenimiento()).toBe(false);
+		expect(compacto.getKmDesdeUltimoMantenimiento()).toBe(0);
+	});
+
+
+
 });

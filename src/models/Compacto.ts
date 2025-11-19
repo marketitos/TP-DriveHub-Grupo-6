@@ -12,9 +12,21 @@ class Compacto extends Auto {
      * @param {number} nroMatricula - Número de matrícula del vehículo.
      * @param {any} estado - Estado inicial del vehículo (usar el enum ESTADO_VEHICULO del proyecto).
      * @param {number} tarifa - Tarifa diaria base del vehículo.
+     * @param {number} cargoAdicional - Cargo adicional por defecto (opcional, default 0).
+     * @param {number} kmDesdeUltimoMantenimiento - Kilómetros desde último mantenimiento (opcional, default 0).
+     * @param {Date} fechaUltMantenimiento - Fecha del último mantenimiento (opcional, default hoy).
+     * @param {number} alquileresCompletados - Cantidad de alquileres completados (opcional, default 0).
      */
-    constructor(nroMatricula: number, estado: any, tarifa: number) {
-        super(nroMatricula, estado, tarifa, 0, 0, new Date(), 0);
+    constructor(
+        nroMatricula: number, 
+        estado: any, 
+        tarifa: number,
+        cargoAdicional: number = 0,
+        kmDesdeUltimoMantenimiento: number = 0,
+        fechaUltMantenimiento: Date = new Date(),
+        alquileresCompletados: number = 0
+    ) {
+        super(nroMatricula, estado, tarifa, cargoAdicional, kmDesdeUltimoMantenimiento, fechaUltMantenimiento, alquileresCompletados);
     }
 
     /**

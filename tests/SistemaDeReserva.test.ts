@@ -4,6 +4,9 @@ import SUV from '../src/models/SUV';
 import Reserva from '../src/models/Reserva';
 import ESTADO_VEHICULO from '../src/enums/ESTADO_VEHICULO';
 import Alta from '../src/models/Alta';
+import { EstadoDisponible } from '../src/models/estadoDisponible';
+import { estadoEnMantenimiento } from '../src/models/estadoEnMantenimiento';
+import Compacto from '../src/models/Compacto';
 
 
 describe('SistemaDeReserva', () => {
@@ -16,7 +19,7 @@ describe('SistemaDeReserva', () => {
   beforeEach(() => {
     sistema = new SistemaDeReserva();
     cliente = new Cliente(1, 'Juan Perez');
-    suv = new SUV(123, ESTADO_VEHICULO.DISPONIBLE, 50, 10, 0, new Date('2023-01-01'), 0);
+    suv = new SUV(123, new EstadoDisponible(), 50, 10, 0, new Date('2023-01-01'), 0);
     fechaInicio = new Date('2024-01-01');
     fechaFin = new Date('2024-01-10');
   });
@@ -66,15 +69,28 @@ describe('SistemaDeReserva', () => {
   });
 
   describe('Métodos varios', () => {
-    test('verificarDisponibilidad debe retornar false', () => {
-      expect(sistema.verificarDisponibilidad()).toBe(false);
-    });
     test('getters deben retornar arrays', () => {
       expect(Array.isArray(sistema.getAutos())).toBe(true);
       expect(Array.isArray(sistema.getClientes())).toBe(true);
       expect(Array.isArray(sistema.getReservas())).toBe(true);
     });
+  });
 
+  describe('Mantenimiento', () => {
+    test('finalizarAlquiler cambia auto a mantenimiento cuando completa 5 alquileres', () => {
+      const auto = new Compacto(456, new EstadoDisponible(), 100, 0, 0, new Date(), 4);
+      sistema.agregarAuto(auto);
+      
+ 
+      expect(auto.getAlquileresCompletados()).toBe(4);
+      expect(auto.necesitaMantenimiento()).toBe(false);
+      expect(auto.getEstado()).toBeInstanceOf(EstadoDisponible);
 
+      sistema.finalizarAlquiler(auto, 500);
+      
+      expect(auto.getAlquileresCompletados()).toBe(5);
+      expect(auto.necesitaMantenimiento()).toBe(true);
+      expect(auto.getEstado()).toBeInstanceOf(estadoEnMantenimiento);
+    });
   });
 });

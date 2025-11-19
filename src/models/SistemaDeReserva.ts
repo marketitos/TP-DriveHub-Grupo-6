@@ -1,6 +1,7 @@
 import Cliente from './Cliente';
 import Auto from './Auto';
 import Reserva from './Reserva';
+import { estadoEnMantenimiento } from './estadoEnMantenimiento';
 
 /**
  * Clase principal del sistema de reservas de autos
@@ -55,19 +56,17 @@ export default class SistemaDeReserva {
      * @param {Date} fechaFin - Fecha de fin de la reserva
      * @param {number} kilometraje - Kilometraje estimado de la reserva
      * @param {Temporadas} temporada - Temporada en la que se realiza la reserva
+     * @throws {Error} Si el auto no está disponible para alquilar
      */
     public crearReserva(cliente: Cliente, auto: Auto, fechaInicio: Date, fechaFin: Date, kilometraje: number = 0, temporada: any): void {
+        try {
+            auto.getEstado().puedeAlquilarse(auto);
+        } catch (error) {
+            throw error;
+        }
+        
         const nuevaReserva = new Reserva(this._reservas.length + 1, cliente, fechaInicio, fechaFin, auto, kilometraje, temporada);
         this._reservas.push(nuevaReserva);
-    }
-
-    /**
-     * Verifica la disponibilidad de autos (método pendiente de implementación)
-     * @returns {boolean} Siempre retorna false (método no implementado)
-     * @todo Implementar lógica de verificación de disponibilidad
-     */
-    public verificarDisponibilidad(): boolean {
-        return false;
     }
 
     /**
@@ -116,5 +115,19 @@ export default class SistemaDeReserva {
      */
     public eliminarReserva(idReserva: number): void {
         this._reservas = this._reservas.filter(reserva => reserva.getIdReserva() !== idReserva);
+    }
+
+    /**
+     * Finaliza un alquiler, actualiza los contadores del vehículo
+     * y verifica automáticamente si necesita mantenimiento
+     * @param {Auto} auto - Vehículo que finaliza el alquiler
+     * @param {number} kmRecorridos - Kilómetros recorridos durante el alquiler
+     */
+    public finalizarAlquiler(auto: Auto, kmRecorridos: number): void {
+        auto.finalizarAlquiler(kmRecorridos);
+    
+        if (auto.necesitaMantenimiento()) {
+            auto.actualizarEstado(new estadoEnMantenimiento());
+        }
     }
 }
