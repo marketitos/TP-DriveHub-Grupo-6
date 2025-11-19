@@ -26,9 +26,7 @@ describe("Tests clase compacto", ()=>{
     })
 
     test('Prueba metodo aplicarCargo()', () => {
-        // cargoFijo * días = 10 * 15 = 150
-        // km excedentes: 700 - 500 = 200 * 0.25 = 50
-        // Total: 150 + 50 = 200
+
         expect(autoSUV.aplicarCargo(reserva)).toEqual(200)
     })
     test('Prueba metodo getCargoFijo', () => {

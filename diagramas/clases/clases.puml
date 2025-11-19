@@ -9,7 +9,6 @@ class SistemaDeReserva{
     - depEstadistica: Estadistica
 
     + crearReserva(cliente:Cliente, auto:Auto ,fechaInicio:Date, fechaFin:Date):void
-    + verificarDisponibilidad(a: Auto, fechaInicio: Date, fechaFin: Date):void 
     + agregarAuto(a:Auto):void
     + eliminarAuto(nroMatricula:number):void
     + agregarCliente(c:Cliente):void
@@ -35,13 +34,6 @@ class Reserva{
     + getDias():number
     + obtenerTarifaDiaria():float
 }
-
-note left of Reserva{
-    obtenerTarifaDiaria(): Dentro de este metodo se llamaria
-    a la funcion calcularBase() del auto 
-    y luego se ajustaria este precio segun la temporada 
-}
-
 
 
 
@@ -104,10 +96,6 @@ class Temporadas{
 
     + setter()
     + getTarifaBaseDiaria():float
-}
-
-note right of Temporadas{
-    Como determina fecha inicio si es baja/media/alta
 }
 
 class Baja extends Temporadas{
