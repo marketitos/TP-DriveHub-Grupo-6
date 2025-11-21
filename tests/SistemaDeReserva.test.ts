@@ -21,7 +21,7 @@ const crearTemporadaMock = () => {
   return t;
 };
 
-describe('SistemaDeReserva (mocks)', () => {
+describe('SistemaDeReserva Tests', () => {
   let sistema: SistemaDeReserva;
 
   beforeEach(() => {

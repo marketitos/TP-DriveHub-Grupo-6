@@ -13,7 +13,7 @@ const crearReservaMock = (dias: number, km: number) => {
   return r;
 };
 
-describe('Sedan (tests con mocks)', () => {
+describe('Sedan Tests', () => {
   test('aplicarCargo = km * 0.2', () => {
     const sedan = new Sedan(1, crearEstado(), 100, 0.5);
     const reserva = crearReservaMock(2, 400);

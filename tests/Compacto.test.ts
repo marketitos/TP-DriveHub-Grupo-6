@@ -20,7 +20,7 @@ const crearReservaMock = (dias: number, km: number) => {
   return r;
 };
 
-describe('Compacto (tests con mocks)', () => {
+describe('Compacto Tests', () => {
   test('aplicarCargo sin exceso (km == tope)', () => {
     const auto = new Compacto(1, crearEstadoMock(), 100);
     const reserva = crearReservaMock(3, 300);

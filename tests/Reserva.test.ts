@@ -32,7 +32,7 @@ const crearTemporadaMock = (multiplicador: number) => {
   return temporada;
 };
 
-describe('Reserva (mocks)', () => {
+describe('Reserva Tests', () => {
   test('constructor asigna propiedades y getters retornan valores', () => {
     const cliente = new Cliente(1, 'Cliente X');
     const auto = crearAutoMock(100);

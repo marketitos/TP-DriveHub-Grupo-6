@@ -5,7 +5,7 @@ import { estadoEnMantenimiento } from '../src/Estados/estadoEnMantenimiento';
 import { ErrorAutoYaAlquilado } from '../src/Errores/errorEstadoEnAlquiler';
 import { ErrorEstadoRealizarMantenimiento } from '../src/Errores/errorEstadoRealizarMantenimiento';
 
-describe('Patrón State de Auto (Compacto) sin estado de limpieza', () => {
+describe('Patrón State de Auto (Compacto)', () => {
   const nuevoAuto = (estado: any = new EstadoDisponible()) =>
     new Compacto(100, estado, 150, 0, 0, new Date(), 0);
 

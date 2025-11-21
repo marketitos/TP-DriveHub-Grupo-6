@@ -24,7 +24,7 @@ const reservaMock = (
   return r;
 };
 
-describe('Estadistica con mocks', () => {
+describe('Estadistica Tests', () => {
   let sistema: jest.Mocked<SistemaDeReserva>;
   let estadistica: Estadistica;
 
