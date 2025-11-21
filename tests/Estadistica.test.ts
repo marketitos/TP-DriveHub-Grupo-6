@@ -6,7 +6,6 @@ import Reserva from '../src/Reserva';
 
 const autoMock = (id: number) => {
   const a = mock<Auto>();
-  // Usamos la referencia como clave, sin necesitar propiedades extra
   return a;
 };
 
@@ -25,15 +24,7 @@ const reservaMock = (
   return r;
 };
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-describe('Estadistica Tests', () => {
-=======
 describe('Estadistica con mocks', () => {
->>>>>>> Stashed changes
-=======
-describe('Estadistica con mocks', () => {
->>>>>>> Stashed changes
   let sistema: jest.Mocked<SistemaDeReserva>;
   let estadistica: Estadistica;
 
@@ -95,7 +86,7 @@ describe('Estadistica con mocks', () => {
       new Date('2025-01-01'),
       new Date('2025-01-31')
     );
-    expect([a2, a3]).toContain(res); // ambos con 1
+    expect([a2, a3]).toContain(res);
   });
 
   test('obtenerVehiculoMenosAlquilados sin reservas retorna undefined', () => {

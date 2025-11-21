@@ -21,15 +21,7 @@ const crearTemporadaMock = () => {
   return t;
 };
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-describe('SistemaDeReserva Test', () => {
-=======
 describe('SistemaDeReserva (mocks)', () => {
->>>>>>> Stashed changes
-=======
-describe('SistemaDeReserva (mocks)', () => {
->>>>>>> Stashed changes
   let sistema: SistemaDeReserva;
 
   beforeEach(() => {
@@ -127,7 +119,7 @@ describe('SistemaDeReserva (mocks)', () => {
     expect(estado.puedeAlquilarse).toHaveBeenCalledWith(auto);
   });
 
-  test('crearReserva con kilometraje por defecto (no se pasa argumento) usa 0', () => {
+  test('crearReserva con kilometraje por defecto usa 0', () => {
     const cliente = new Cliente(2, 'Defecto');
     const { auto, estado } = crearAutoMock(100);
     estado.puedeAlquilarse.mockImplementation(() => {});
@@ -149,7 +141,7 @@ describe('SistemaDeReserva (mocks)', () => {
     expect(sistema.getReservas()).toHaveLength(0);
   });
 
-  test('ids de reservas incrementan correctamente con múltiples creaciones y factory por defecto', () => {
+  test('ids incrementan correctamente con múltiples creaciones usando factory por defecto', () => {
     const cliente = new Cliente(5, 'Multi');
     const { auto, estado } = crearAutoMock(222);
     estado.puedeAlquilarse.mockImplementation(() => {});
@@ -163,7 +155,7 @@ describe('SistemaDeReserva (mocks)', () => {
   test('setReservaCreator reemplaza la estrategia de creación', () => {
     const customCreator = mock<ReservaCreator>();
     customCreator.crearReserva.mockImplementation((id, cl, fi, ff, au, km, temp) => {
-      return new Reserva(id, cl, fi, ff, au, km + 999, temp); // altera kilometraje para comprobar
+      return new Reserva(id, cl, fi, ff, au, km + 999, temp);
     });
 
     sistema.setReservaCreator(customCreator);
@@ -174,7 +166,7 @@ describe('SistemaDeReserva (mocks)', () => {
     const temporada = crearTemporadaMock();
 
     const reserva = sistema.crearReserva(cliente, auto, new Date(), new Date(), 1, temporada);
-    expect(reserva.getKilometraje()).toBe(1000); // 1 + 999
+    expect(reserva.getKilometraje()).toBe(1000);
     expect(customCreator.crearReserva).toHaveBeenCalledTimes(1);
   });
 });

@@ -3,18 +3,9 @@ import { EstadoDisponible } from '../src/Estados/estadoDisponible';
 import { estadoEnAlquiler } from '../src/Estados/estadoEnAlquiler';
 import { estadoEnMantenimiento } from '../src/Estados/estadoEnMantenimiento';
 import { ErrorAutoYaAlquilado } from '../src/Errores/errorEstadoEnAlquiler';
-import { ErrorAutoEnMantenimiento } from '../src/Errores/errorEstadoEnMantenimiento';
 import { ErrorEstadoRealizarMantenimiento } from '../src/Errores/errorEstadoRealizarMantenimiento';
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-describe('Patrón State de Auto (Compacto)', () => {
-=======
 describe('Patrón State de Auto (Compacto) sin estado de limpieza', () => {
->>>>>>> Stashed changes
-=======
-describe('Patrón State de Auto (Compacto) sin estado de limpieza', () => {
->>>>>>> Stashed changes
   const nuevoAuto = (estado: any = new EstadoDisponible()) =>
     new Compacto(100, estado, 150, 0, 0, new Date(), 0);
 
@@ -54,7 +45,7 @@ describe('Patrón State de Auto (Compacto) sin estado de limpieza', () => {
   });
 
   describe('estadoEnMantenimiento', () => {
-    test('puedeAlquilarse lanza ErrorAutoEnMantenimiento', () => {
+    test('puedeAlquilarse lanza ErrorEstadoRealizarMantenimiento', () => {
       const auto = nuevoAuto(new estadoEnMantenimiento());
       expect(() => auto.getEstado().puedeAlquilarse(auto)).toThrow(ErrorEstadoRealizarMantenimiento);
     });

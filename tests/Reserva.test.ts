@@ -14,7 +14,6 @@ const crearAutoMock = (tarifaInicial: number) => {
     tarifa = nueva;
   });
   auto.calcularBase.mockImplementation((reserva: Reserva) => {
-    // Simula cálculo base: tarifa actual * días + 10 (cargo fijo para observar efecto del cambio de tarifa)
     return tarifa * reserva.getDias() + 10;
   });
   auto.finalizarAlquiler.mockImplementation(() => {});
@@ -27,19 +26,13 @@ const crearAutoMock = (tarifaInicial: number) => {
 const crearTemporadaMock = (multiplicador: number) => {
   const temporada = mock<Temporadas>();
   temporada.getMultiplicador.mockReturnValue(multiplicador);
-  temporada.calcularTarifaAjustada.mockImplementation((tarifaBase: number) => tarifaBase * multiplicador);
+  temporada.calcularTarifaAjustada.mockImplementation(
+    (tarifaBase: number) => tarifaBase * multiplicador
+  );
   return temporada;
 };
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-describe('Reserva Tests', () => {
-=======
 describe('Reserva (mocks)', () => {
->>>>>>> Stashed changes
-=======
-describe('Reserva (mocks)', () => {
->>>>>>> Stashed changes
   test('constructor asigna propiedades y getters retornan valores', () => {
     const cliente = new Cliente(1, 'Cliente X');
     const auto = crearAutoMock(100);
@@ -95,23 +88,30 @@ describe('Reserva (mocks)', () => {
     const auto = crearAutoMock(100);
     const temporada = crearTemporadaMock(1.2);
     const inicio = new Date(2025, 0, 1);
-    const fin = new Date(2025, 0, 2); // 2 días
+    const fin = new Date(2025, 0, 2);
     const reserva = new Reserva(4, new Cliente(5, 'D'), inicio, fin, auto, 0, temporada);
 
     const total = reserva.costoTotalReserva();
-    // Tarifa ajustada 100 * 1.2 = 120; base simulada = 120 * 2 + 10 = 250
-    expect(total).toBe(250);
+    expect(total).toBe(250); // 120 * 2 + 10
     expect(auto.setTarifa).toHaveBeenCalledWith(120);
     expect(auto.calcularBase).toHaveBeenCalledWith(reserva);
   });
 
-  test('costoTotalReserva usa nueva tarifa si se llama dos veces (idempotencia sobre tarifa modificada)', () => {
+  test('costoTotalReserva segunda llamada usa tarifa ya modificada y la vuelve a ajustar', () => {
     const auto = crearAutoMock(80);
-    const temporada = crearTemporadaMock(1.5); // Ajuste a 120
-    const reserva = new Reserva(5, new Cliente(6, 'E'), new Date(2025, 0, 1), new Date(2025, 0, 3), auto, 0, temporada); // 3 días
+    const temporada = crearTemporadaMock(1.5);
+    const reserva = new Reserva(
+      5,
+      new Cliente(6, 'E'),
+      new Date(2025, 0, 1),
+      new Date(2025, 0, 3),
+      auto,
+      0,
+      temporada
+    );
 
     const t1 = reserva.costoTotalReserva(); // 120 * 3 + 10 = 370
-    const t2 = reserva.costoTotalReserva(); // vuelve a ajustar (120*1.5=180) => 180 * 3 + 10 = 550
+    const t2 = reserva.costoTotalReserva(); // 180 * 3 + 10 = 550
     expect(t1).toBe(370);
     expect(t2).toBe(550);
     expect(auto.setTarifa).toHaveBeenNthCalledWith(1, 120);
@@ -154,7 +154,7 @@ describe('Reserva (mocks)', () => {
     expect(argumentoEstado).toBeInstanceOf(estadoEnMantenimiento);
   });
 
-  test('setters modifican estado interno correctamente', () => {
+  test('setters modifican estado interno', () => {
     const cliente = new Cliente(9, 'H');
     const auto = crearAutoMock(100);
     const reserva = new Reserva(

@@ -14,22 +14,14 @@ const crearReservaMock = (dias: number, km: number) => {
   return r;
 };
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-describe('SUV Tests', () => {
-=======
 describe('SUV (mocks)', () => {
->>>>>>> Stashed changes
-=======
-describe('SUV (mocks)', () => {
->>>>>>> Stashed changes
   test('aplicarCargo sin exceso (km <= 500) = cargoFijo * días', () => {
     const suv = new SUV(1, crearEstado(), 100, 10, 0, new Date(), 0);
     const reserva = crearReservaMock(4, 500);
     expect(suv.aplicarCargo(reserva)).toBe(40);
   });
 
-  test('aplicarCargo con exceso (km > 500) incluye cargo por km adicional', () => {
+  test('aplicarCargo con exceso (km > 500)', () => {
     const suv = new SUV(2, crearEstado(), 80, 15, 0, new Date(), 0);
     const reserva = crearReservaMock(2, 650); // exceso 150 -> 37.5
     expect(suv.aplicarCargo(reserva)).toBeCloseTo(30 + 37.5);
@@ -66,7 +58,7 @@ describe('SUV (mocks)', () => {
     const suv = new SUV(7, crearEstado(), 70, 10, 0, new Date(), 0);
     const reserva = crearReservaMock(2, 450);
     expect(suv.aplicarCargo(reserva)).toBe(20);
-    reserva.getKilometraje.mockReturnValue(520); // exceso 20 -> 5
+    reserva.getKilometraje.mockReturnValue(520);
     expect(suv.aplicarCargo(reserva)).toBe(25);
   });
 
@@ -78,12 +70,12 @@ describe('SUV (mocks)', () => {
     expect(suv.calcularBase(reserva)).toBeCloseTo(70 * 3 + (15 + 12.5));
   });
 
-  test('consistencia en distintos escenarios', () => {
+  test('consistencia en escenarios múltiples', () => {
     const suv = new SUV(9, crearEstado(), 30, 6, 0, new Date(), 0);
-    const r1 = crearReservaMock(1, 100); // cargo 6
-    const r2 = crearReservaMock(5, 800); // cargo fijo 30 + exceso 300*0.25=75 => 105
+    const r1 = crearReservaMock(1, 100);
+    const r2 = crearReservaMock(5, 800); // exceso 300 -> 75
     expect(suv.calcularBase(r1)).toBe(30 * 1 + 6);
-    expect(suv.calcularBase(r2)).toBe(30 * 5 + 105);
+    expect(suv.calcularBase(r2)).toBe(30 * 5 + (30 + 75));
   });
 });
 
@@ -93,10 +85,8 @@ describe('SUV (integración con Reserva real)', () => {
     const suv = new SUV(10, estado, 50, 10, 0, new Date(), 0);
     const clienteFake = mock<any>();
     const inicio = new Date(2025, 0, 1);
-    const fin = new Date(2025, 0, 5); // 5 días
+    const fin = new Date(2025, 0, 5);
     const reservaReal = new Reserva(1, clienteFake, inicio, fin, suv, 700, new Alta());
-    // cargo: 5*10 = 50 + exceso (700-500)=200*0.25=50 => 100
-    // base = 50*5 + 100 = 350
-    expect(suv.calcularBase(reservaReal)).toBe(350);
+    expect(suv.calcularBase(reservaReal)).toBe(50 * 5 + (50 + 50));
   });
 });

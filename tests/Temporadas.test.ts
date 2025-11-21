@@ -10,8 +10,12 @@ const crearAutoMock = (tarifa: number) => {
   const a = mock<Auto>();
   let t = tarifa;
   a.getTarifa.mockImplementation(() => t);
-  a.setTarifa.mockImplementation(n => { t = n; });
-  a.calcularBase.mockImplementation((r: Reserva) => a.getTarifa() * r.getDias());
+  a.setTarifa.mockImplementation((n) => {
+    t = n;
+  });
+  a.calcularBase.mockImplementation(
+    (r: Reserva) => a.getTarifa() * r.getDias()
+  );
   return a;
 };
 
@@ -46,79 +50,64 @@ describe('calcularTarifaAjustada', () => {
   });
 });
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 describe('setMultiplicador afecta cuenta', () => {
-=======
-describe('setMultiplicador afecta cálculo', () => {
->>>>>>> Stashed changes
-=======
-describe('setMultiplicador afecta cálculo', () => {
->>>>>>> Stashed changes
-  test('Alta cambia a 1.5', () => {
-    const alta = new Alta();
-    alta.setMultiplicador(1.5);
-    expect(alta.getMultiplicador()).toBe(1.5);
-    expect(alta.calcularTarifaAjustada(200)).toBe(300);
-  });
-});
+  describe('setMultiplicador afecta cálculo', () => {
+    describe('setMultiplicador afecta cálculo', () => {
+      test('Alta cambia a 1.5', () => {
+        const alta = new Alta();
+        alta.setMultiplicador(1.5);
+        expect(alta.getMultiplicador()).toBe(1.5);
+        expect(alta.calcularTarifaAjustada(200)).toBe(300);
+      });
+    });
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-describe('Temporadas Tests', () => {
-=======
-describe('Integración simple con Auto y Reserva mock', () => {
->>>>>>> Stashed changes
-=======
-describe('Integración simple con Auto y Reserva mock', () => {
->>>>>>> Stashed changes
-  test('Reserva 3 días con Alta aplica tarifa ajustada antes de base', () => {
-    const auto = crearAutoMock(100);
-    const alta = new Alta();
-    const reserva = crearReservaMock(3);
-    const tarifaAjustada = alta.calcularTarifaAjustada(auto.getTarifa());
-    auto.setTarifa(tarifaAjustada);
-    const total = auto.calcularBase(reserva);
-    expect(total).toBe(120 * 3);
-  });
-  test('Cambio de multiplicador recalcula distinto total', () => {
-    const auto = crearAutoMock(80);
-    const media = new Media();
-    const reserva = crearReservaMock(2);
-    auto.setTarifa(media.calcularTarifaAjustada(auto.getTarifa()));
-    const t1 = auto.calcularBase(reserva);
-    media.setMultiplicador(1.3);
-    auto.setTarifa(media.calcularTarifaAjustada(80));
-    const t2 = auto.calcularBase(reserva);
-    expect(t1).toBe(160);
-    expect(t2).toBe(208);
-  });
-  test('Baja seguido de ajuste manual', () => {
-    const auto = crearAutoMock(200);
-    const baja = new Baja();
-    const reserva = crearReservaMock(1);
-    auto.setTarifa(baja.calcularTarifaAjustada(200));
-    const t1 = auto.calcularBase(reserva);
-    baja.setMultiplicador(0.5);
-    auto.setTarifa(baja.calcularTarifaAjustada(200));
-    const t2 = auto.calcularBase(reserva);
-    expect(t1).toBe(180);
-    expect(t2).toBe(100);
-  });
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
-});
+    describe('Temporadas Tests', () => {
+      describe('Integración simple con Auto y Reserva mock', () => {
+        describe('Integración simple con Auto y Reserva mock', () => {
+          test('Reserva 3 días con Alta aplica tarifa ajustada antes de base', () => {
+            const auto = crearAutoMock(100);
+            const alta = new Alta();
+            const reserva = crearReservaMock(3);
+            const tarifaAjustada = alta.calcularTarifaAjustada(
+              auto.getTarifa()
+            );
+            auto.setTarifa(tarifaAjustada);
+            const total = auto.calcularBase(reserva);
+            expect(total).toBe(120 * 3);
+          });
+          test('Cambio de multiplicador recalcula distinto total', () => {
+            const auto = crearAutoMock(80);
+            const media = new Media();
+            const reserva = crearReservaMock(2);
+            auto.setTarifa(media.calcularTarifaAjustada(auto.getTarifa()));
+            const t1 = auto.calcularBase(reserva);
+            media.setMultiplicador(1.3);
+            auto.setTarifa(media.calcularTarifaAjustada(80));
+            const t2 = auto.calcularBase(reserva);
+            expect(t1).toBe(160);
+            expect(t2).toBe(208);
+          });
+          test('Baja seguido de ajuste manual', () => {
+            const auto = crearAutoMock(200);
+            const baja = new Baja();
+            const reserva = crearReservaMock(1);
+            auto.setTarifa(baja.calcularTarifaAjustada(200));
+            const t1 = auto.calcularBase(reserva);
+            baja.setMultiplicador(0.5);
+            auto.setTarifa(baja.calcularTarifaAjustada(200));
+            const t2 = auto.calcularBase(reserva);
+            expect(t1).toBe(180);
+            expect(t2).toBe(100);
+          });
+        });
 
-describe('Polimorfismo básico', () => {
-  test('Instancias son subtipos de Temporadas', () => {
-    const arr: Temporadas[] = [new Alta(), new Media(), new Baja()];
-    expect(arr.every(t => t instanceof Temporadas)).toBe(true);
+        describe('Polimorfismo básico', () => {
+          test('Instancias son subtipos de Temporadas', () => {
+            const arr: Temporadas[] = [new Alta(), new Media(), new Baja()];
+            expect(arr.every((t) => t instanceof Temporadas)).toBe(true);
+          });
+        });
+      });
+    });
   });
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 });

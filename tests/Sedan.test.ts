@@ -13,15 +13,7 @@ const crearReservaMock = (dias: number, km: number) => {
   return r;
 };
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-describe('Sedan Tests', () => {
-=======
 describe('Sedan (tests con mocks)', () => {
->>>>>>> Stashed changes
-=======
-describe('Sedan (tests con mocks)', () => {
->>>>>>> Stashed changes
   test('aplicarCargo = km * 0.2', () => {
     const sedan = new Sedan(1, crearEstado(), 100, 0.5);
     const reserva = crearReservaMock(2, 400);
