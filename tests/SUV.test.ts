@@ -14,7 +14,11 @@ const crearReservaMock = (dias: number, km: number) => {
   return r;
 };
 
+<<<<<<< Updated upstream
 describe('SUV Tests', () => {
+=======
+describe('SUV (mocks)', () => {
+>>>>>>> Stashed changes
   test('aplicarCargo sin exceso (km <= 500) = cargoFijo * días', () => {
     const suv = new SUV(1, crearEstado(), 100, 10, 0, new Date(), 0);
     const reserva = crearReservaMock(4, 500);

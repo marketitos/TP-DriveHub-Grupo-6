@@ -20,7 +20,11 @@ const crearReservaMock = (dias: number, km: number) => {
   return r;
 };
 
+<<<<<<< Updated upstream
 describe('Compacto Tests', () => {
+=======
+describe('Compacto', () => {
+>>>>>>> Stashed changes
   test('aplicarCargo sin exceso (km == tope)', () => {
     const auto = new Compacto(1, crearEstadoMock(), 100);
     const reserva = crearReservaMock(3, 300);
@@ -88,7 +92,11 @@ describe('Compacto Tests', () => {
   });
 });
 
+<<<<<<< Updated upstream
 describe('Compacto Tests', () => {
+=======
+describe('Compacto (tests desde 0 con mocks)', () => {
+>>>>>>> Stashed changes
   const crearAuto = (tarifa = 100) => {
     const estado = mock<EstadoActual>();
     return new Compacto(1, estado, tarifa);

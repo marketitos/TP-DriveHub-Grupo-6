@@ -6,7 +6,11 @@ import { ErrorAutoYaAlquilado } from '../src/Errores/errorEstadoEnAlquiler';
 import { ErrorAutoEnMantenimiento } from '../src/Errores/errorEstadoEnMantenimiento';
 import { ErrorEstadoRealizarMantenimiento } from '../src/Errores/errorEstadoRealizarMantenimiento';
 
+<<<<<<< Updated upstream
 describe('Patrón State de Auto (Compacto)', () => {
+=======
+describe('Patrón State de Auto (Compacto) sin estado de limpieza', () => {
+>>>>>>> Stashed changes
   const nuevoAuto = (estado: any = new EstadoDisponible()) =>
     new Compacto(100, estado, 150, 0, 0, new Date(), 0);
 

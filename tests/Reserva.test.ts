@@ -31,7 +31,11 @@ const crearTemporadaMock = (multiplicador: number) => {
   return temporada;
 };
 
+<<<<<<< Updated upstream
 describe('Reserva Tests', () => {
+=======
+describe('Reserva (mocks)', () => {
+>>>>>>> Stashed changes
   test('constructor asigna propiedades y getters retornan valores', () => {
     const cliente = new Cliente(1, 'Cliente X');
     const auto = crearAutoMock(100);

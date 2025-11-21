@@ -25,7 +25,11 @@ const reservaMock = (
   return r;
 };
 
+<<<<<<< Updated upstream
 describe('Estadistica Tests', () => {
+=======
+describe('Estadistica con mocks', () => {
+>>>>>>> Stashed changes
   let sistema: jest.Mocked<SistemaDeReserva>;
   let estadistica: Estadistica;
 

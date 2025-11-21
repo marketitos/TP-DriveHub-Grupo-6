@@ -46,7 +46,11 @@ describe('calcularTarifaAjustada', () => {
   });
 });
 
+<<<<<<< Updated upstream
 describe('setMultiplicador afecta cuenta', () => {
+=======
+describe('setMultiplicador afecta cálculo', () => {
+>>>>>>> Stashed changes
   test('Alta cambia a 1.5', () => {
     const alta = new Alta();
     alta.setMultiplicador(1.5);
@@ -55,7 +59,11 @@ describe('setMultiplicador afecta cuenta', () => {
   });
 });
 
+<<<<<<< Updated upstream
 describe('Temporadas Tests', () => {
+=======
+describe('Integración simple con Auto y Reserva mock', () => {
+>>>>>>> Stashed changes
   test('Reserva 3 días con Alta aplica tarifa ajustada antes de base', () => {
     const auto = crearAutoMock(100);
     const alta = new Alta();
@@ -89,4 +97,14 @@ describe('Temporadas Tests', () => {
     expect(t1).toBe(180);
     expect(t2).toBe(100);
   });
+<<<<<<< Updated upstream
+=======
+});
+
+describe('Polimorfismo básico', () => {
+  test('Instancias son subtipos de Temporadas', () => {
+    const arr: Temporadas[] = [new Alta(), new Media(), new Baja()];
+    expect(arr.every(t => t instanceof Temporadas)).toBe(true);
+  });
+>>>>>>> Stashed changes
 });
