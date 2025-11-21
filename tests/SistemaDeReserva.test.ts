@@ -1,80 +1,172 @@
-import SistemaDeReserva from '../src/models/SistemaDeReserva';
-import Cliente from '../src/models/Cliente';
-import SUV from '../src/models/SUV';
-import Reserva from '../src/models/Reserva';
-import ESTADO_VEHICULO from '../src/enums/ESTADO_VEHICULO';
-import Alta from '../src/models/Alta';
+import { mock } from 'jest-mock-extended';
+import SistemaDeReserva from '../src/SistemaDeReserva';
+import Cliente from '../src/Utils/Cliente';
+import Reserva from '../src/Reserva';
+import Auto from '../src/Auto/Auto';
+import Temporadas from '../src/Temporadas/Temporadas';
+import { EstadoActual } from '../src/Estados/EstadoActual';
+import { ReservaCreator } from '../src/ReservaFactory';
 
+const crearAutoMock = (matricula: number) => {
+  const estado = mock<EstadoActual>();
+  const auto = mock<Auto>();
+  auto.getNroMatricula.mockReturnValue(matricula);
+  auto.getEstado.mockReturnValue(estado);
+  return { auto, estado };
+};
 
-describe('SistemaDeReserva', () => {
+const crearTemporadaMock = () => {
+  const t = mock<Temporadas>();
+  t.calcularTarifaAjustada.mockImplementation((base: number) => base);
+  return t;
+};
+
+describe('SistemaDeReserva Test', () => {
   let sistema: SistemaDeReserva;
-  let cliente: Cliente;
-  let suv: SUV;
-  let fechaInicio: Date;
-  let fechaFin: Date;
 
   beforeEach(() => {
     sistema = new SistemaDeReserva();
-    cliente = new Cliente(1, 'Juan Perez');
-    suv = new SUV(123, ESTADO_VEHICULO.DISPONIBLE, 50, 10, 0, new Date('2023-01-01'), 0);
-    fechaInicio = new Date('2024-01-01');
-    fechaFin = new Date('2024-01-10');
   });
 
-  describe('Constructor', () => {
-    test('debe inicializar con arrays vacíos', () => {
-      expect(sistema.getAutos()).toEqual([]);
-      expect(sistema.getClientes()).toEqual([]);
-      expect(sistema.getReservas()).toEqual([]);
-    });
+  test('constructor inicia arrays vacíos', () => {
+    expect(sistema.getAutos()).toEqual([]);
+    expect(sistema.getClientes()).toEqual([]);
+    expect(sistema.getReservas()).toEqual([]);
   });
 
-  describe('Gestión de Autos', () => {
-    test('debe agregar y eliminar autos correctamente', () => {
-      sistema.agregarAuto(suv);
-      expect(sistema.getAutos()).toHaveLength(1);
-      
-      sistema.eliminarAuto(123);
-      expect(sistema.getAutos()).toHaveLength(0);
-    });
+  test('agregar y eliminar autos', () => {
+    const { auto: a1 } = crearAutoMock(101);
+    const { auto: a2 } = crearAutoMock(202);
+    sistema.agregarAuto(a1);
+    sistema.agregarAuto(a2);
+    expect(sistema.getAutos()).toHaveLength(2);
+    sistema.eliminarAuto(101);
+    expect(sistema.getAutos()).toHaveLength(1);
+    expect(sistema.getAutos()[0]).toBe(a2);
   });
 
-  describe('Gestión de Clientes', () => {
-    test('debe agregar y eliminar clientes correctamente', () => {
-      sistema.agregarCliente(cliente);
-      expect(sistema.getClientes()).toHaveLength(1);
-      
-      sistema.eliminarCliente(1);
-      expect(sistema.getClientes()).toHaveLength(0);
-    });
+  test('eliminarAuto de matrícula inexistente no rompe', () => {
+    const { auto: a1 } = crearAutoMock(10);
+    sistema.agregarAuto(a1);
+    sistema.eliminarAuto(999);
+    expect(sistema.getAutos()).toHaveLength(1);
   });
 
-  describe('Gestión de Reservas', () => {
-    test('debe crear reservas correctamente', () => {
-      sistema.crearReserva(cliente, suv, fechaInicio, fechaFin, 0, new Alta());
-      expect(sistema.getReservas()).toHaveLength(1);
-    });
-    test('debe agregar y eliminar reservas existentes', () => {
-      const reserva = new Reserva(1, cliente, fechaInicio, fechaFin, suv, 0, new Alta());
-      
-      sistema.agregarReserva(reserva);
-      expect(sistema.getReservas()).toHaveLength(1);
-      
-      sistema.eliminarReserva(1);
-      expect(sistema.getReservas()).toHaveLength(0);
-    });
+  test('agregar y eliminar clientes', () => {
+    const c1 = new Cliente(1, 'Uno');
+    const c2 = new Cliente(2, 'Dos');
+    sistema.agregarCliente(c1);
+    sistema.agregarCliente(c2);
+    expect(sistema.getClientes()).toHaveLength(2);
+    sistema.eliminarCliente(1);
+    expect(sistema.getClientes()).toHaveLength(1);
+    expect(sistema.getClientes()[0]).toBe(c2);
   });
 
-  describe('Métodos varios', () => {
-    test('verificarDisponibilidad debe retornar false', () => {
-      expect(sistema.verificarDisponibilidad()).toBe(false);
-    });
-    test('getters deben retornar arrays', () => {
-      expect(Array.isArray(sistema.getAutos())).toBe(true);
-      expect(Array.isArray(sistema.getClientes())).toBe(true);
-      expect(Array.isArray(sistema.getReservas())).toBe(true);
+  test('eliminarCliente inexistente no modifica lista', () => {
+    const c1 = new Cliente(1, 'Solo');
+    sistema.agregarCliente(c1);
+    sistema.eliminarCliente(999);
+    expect(sistema.getClientes()).toHaveLength(1);
+  });
+
+  test('agregarReserva inserta instancia existente', () => {
+    const c = new Cliente(10, 'Cliente');
+    const { auto } = crearAutoMock(555);
+    const temporada = crearTemporadaMock();
+    const r = new Reserva(1, c, new Date(), new Date(), auto, 0, temporada);
+    sistema.agregarReserva(r);
+    expect(sistema.getReservas()).toHaveLength(1);
+    expect(sistema.getReservas()[0]).toBe(r);
+  });
+
+  test('eliminarReserva quita por id', () => {
+    const c = new Cliente(10, 'Cliente');
+    const { auto } = crearAutoMock(555);
+    const temporada = crearTemporadaMock();
+    const r1 = new Reserva(1, c, new Date(), new Date(), auto, 0, temporada);
+    const r2 = new Reserva(2, c, new Date(), new Date(), auto, 0, temporada);
+    sistema.agregarReserva(r1);
+    sistema.agregarReserva(r2);
+    sistema.eliminarReserva(1);
+    expect(sistema.getReservas()).toHaveLength(1);
+    expect(sistema.getReservas()[0].getIdReserva()).toBe(2);
+  });
+
+  test('eliminarReserva inexistente no altera lista', () => {
+    const c = new Cliente(10, 'Cliente');
+    const { auto } = crearAutoMock(1);
+    const temporada = crearTemporadaMock();
+    const r = new Reserva(1, c, new Date(), new Date(), auto, 0, temporada);
+    sistema.agregarReserva(r);
+    sistema.eliminarReserva(999);
+    expect(sistema.getReservas()).toHaveLength(1);
+  });
+
+  test('crearReserva agrega una nueva reserva con id incremental', () => {
+    const cliente = new Cliente(1, 'Juan');
+    const { auto, estado } = crearAutoMock(999);
+    estado.puedeAlquilarse.mockImplementation(() => {});
+    const inicio = new Date(2025, 0, 1);
+    const fin = new Date(2025, 0, 3);
+    const temporada = crearTemporadaMock();
+
+    const result = sistema.crearReserva(cliente, auto, inicio, fin, 150, temporada);
+
+    expect(result.getIdReserva()).toBe(1);
+    expect(result.getKilometraje()).toBe(150);
+    expect(sistema.getReservas()).toHaveLength(1);
+    expect(estado.puedeAlquilarse).toHaveBeenCalledWith(auto);
+  });
+
+  test('crearReserva con kilometraje por defecto (no se pasa argumento) usa 0', () => {
+    const cliente = new Cliente(2, 'Defecto');
+    const { auto, estado } = crearAutoMock(100);
+    estado.puedeAlquilarse.mockImplementation(() => {});
+    const reserva = sistema.crearReserva(cliente, auto, new Date(), new Date(), undefined as any, crearTemporadaMock());
+    expect(reserva.getKilometraje()).toBe(0);
+  });
+
+  test('crearReserva propaga error si auto no puede alquilarse', () => {
+    const cliente = new Cliente(3, 'Error');
+    const { auto, estado } = crearAutoMock(1000);
+    const temporada = crearTemporadaMock();
+    const err = new Error('No disponible');
+    estado.puedeAlquilarse.mockImplementation(() => { throw err; });
+
+    expect(() =>
+      sistema.crearReserva(cliente, auto, new Date(), new Date(), 0, temporada)
+    ).toThrow(err);
+
+    expect(sistema.getReservas()).toHaveLength(0);
+  });
+
+  test('ids de reservas incrementan correctamente con múltiples creaciones y factory por defecto', () => {
+    const cliente = new Cliente(5, 'Multi');
+    const { auto, estado } = crearAutoMock(222);
+    estado.puedeAlquilarse.mockImplementation(() => {});
+    const temporada = crearTemporadaMock();
+    const r1 = sistema.crearReserva(cliente, auto, new Date(), new Date(), 10, temporada);
+    const r2 = sistema.crearReserva(cliente, auto, new Date(), new Date(), 20, temporada);
+    expect(r1.getIdReserva()).toBe(1);
+    expect(r2.getIdReserva()).toBe(2);
+  });
+
+  test('setReservaCreator reemplaza la estrategia de creación', () => {
+    const customCreator = mock<ReservaCreator>();
+    customCreator.crearReserva.mockImplementation((id, cl, fi, ff, au, km, temp) => {
+      return new Reserva(id, cl, fi, ff, au, km + 999, temp); // altera kilometraje para comprobar
     });
 
+    sistema.setReservaCreator(customCreator);
 
+    const cliente = new Cliente(77, 'Factory');
+    const { auto, estado } = crearAutoMock(321);
+    estado.puedeAlquilarse.mockImplementation(() => {});
+    const temporada = crearTemporadaMock();
+
+    const reserva = sistema.crearReserva(cliente, auto, new Date(), new Date(), 1, temporada);
+    expect(reserva.getKilometraje()).toBe(1000); // 1 + 999
+    expect(customCreator.crearReserva).toHaveBeenCalledTimes(1);
   });
 });

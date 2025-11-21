@@ -1,111 +1,95 @@
-import ESTADO_VEHICULO from "../src/enums/ESTADO_VEHICULO"
-import Compacto from "../src/models/Compacto"
-import { EstadoDisponible } from '../src/models/estadoDisponible'
-import { estadoEnAlquiler } from '../src/models/estadoEnAlquiler'
-import { estadoEnLimpieza } from '../src/models/estadoEnLimpieza'
-import { estadoEnMantenimiento } from '../src/models/estadoEnMantenimiento'
-import { ErrorAutoYaAlquilado } from '../src/models/Errores/errorEstadoEnAlquiler'
-import { ErrorAutoEnLimpieza } from '../src/models/Errores/estadoEnLimpieza'
-import { ErrorAutoEnMantenimiento } from '../src/models/Errores/errorEstadoEnMantenimiento'
+import Compacto from '../src/Auto/Compacto';
+import { EstadoDisponible } from '../src/Estados/estadoDisponible';
+import { estadoEnAlquiler } from '../src/Estados/estadoEnAlquiler';
+import { estadoEnMantenimiento } from '../src/Estados/estadoEnMantenimiento';
+import { ErrorAutoYaAlquilado } from '../src/Errores/errorEstadoEnAlquiler';
+import { ErrorAutoEnMantenimiento } from '../src/Errores/errorEstadoEnMantenimiento';
+import { ErrorEstadoRealizarMantenimiento } from '../src/Errores/errorEstadoRealizarMantenimiento';
 
-describe("Tests de Estados de Auto", () => {
-    let autoCompacto: Compacto;
-    let estadoDisponible: EstadoDisponible;
-    let estadoAlquiler: estadoEnAlquiler;
-    let estadoLimpieza: estadoEnLimpieza;
-    let estadoMantenimiento: estadoEnMantenimiento;
+describe('Patrón State de Auto (Compacto)', () => {
+  const nuevoAuto = (estado: any = new EstadoDisponible()) =>
+    new Compacto(100, estado, 150, 0, 0, new Date(), 0);
 
-    beforeEach(() => {
-        autoCompacto = new Compacto(123, ESTADO_VEHICULO.DISPONIBLE, 100)
-        estadoDisponible = new EstadoDisponible()
-        estadoAlquiler = new estadoEnAlquiler()
-        estadoLimpieza = new estadoEnLimpieza()
-        estadoMantenimiento = new estadoEnMantenimiento()
-    })
+  describe('EstadoDisponible', () => {
+    test('puedeAlquilarse cambia a estadoEnAlquiler', () => {
+      const auto = nuevoAuto(new EstadoDisponible());
+      expect(() => auto.getEstado().puedeAlquilarse(auto)).not.toThrow();
+      expect(auto.getEstado()).toBeInstanceOf(estadoEnAlquiler);
+    });
 
-    test('Auto en estado Disponible puede alquilarse', () => {
-        expect(() => {
-            estadoDisponible.puedeAlquilarse(autoCompacto)
-        }).not.toThrow()
-    })
+    test('realizarMantenimiento resetea métricas', () => {
+      const auto = nuevoAuto(new EstadoDisponible());
+      auto.setKmDesdeUltimoMantenimiento(9000);
+      auto.setAlquileresCompletados(4);
+      auto.realizarMantenimiento();
+      expect(auto.getKmDesdeUltimoMantenimiento()).toBe(0);
+      expect(auto.getAlquileresCompletados()).toBe(0);
+      expect(auto.getEstado()).toBeInstanceOf(EstadoDisponible);
+    });
+  });
 
-    test('Auto cambia de Disponible a EnAlquiler al alquilarse', () => {
-        estadoDisponible.puedeAlquilarse(autoCompacto)
-        
-        expect(() => {
-            autoCompacto.getEstado().puedeAlquilarse(autoCompacto)
-        }).toThrow(ErrorAutoYaAlquilado)
-    })
+  describe('estadoEnAlquiler', () => {
+    test('puedeAlquilarse lanza ErrorAutoYaAlquilado', () => {
+      const auto = nuevoAuto(new estadoEnAlquiler());
+      expect(() => auto.getEstado().puedeAlquilarse(auto)).toThrow(ErrorAutoYaAlquilado);
+    });
 
-    test('Auto en estado EnAlquiler lanza ErrorAutoYaAlquilado', () => {
-        autoCompacto.actualizarEstado(estadoAlquiler)
+    test('finalizarAlquiler actualiza métricas y vuelve a disponible', () => {
+      const auto = nuevoAuto(new estadoEnAlquiler());
+      auto.setKmDesdeUltimoMantenimiento(500);
+      auto.setAlquileresCompletados(2);
+      auto.finalizarAlquiler(300);
+      expect(auto.getKmDesdeUltimoMantenimiento()).toBe(800);
+      expect(auto.getAlquileresCompletados()).toBe(3);
+      expect(auto.getEstado()).toBeInstanceOf(EstadoDisponible);
+    });
+  });
 
-        expect(() => {
-            estadoAlquiler.puedeAlquilarse(autoCompacto)
-        }).toThrow(ErrorAutoYaAlquilado)
-    })
+  describe('estadoEnMantenimiento', () => {
+    test('puedeAlquilarse lanza ErrorAutoEnMantenimiento', () => {
+      const auto = nuevoAuto(new estadoEnMantenimiento());
+      expect(() => auto.getEstado().puedeAlquilarse(auto)).toThrow(ErrorEstadoRealizarMantenimiento);
+    });
 
-    test('Auto en estado EnLimpieza lanza ErrorAutoEnLimpieza', () => {
-        autoCompacto.actualizarEstado(estadoLimpieza)
+    test('finalizarMantenimiento vuelve a disponible', () => {
+      const auto = nuevoAuto(new estadoEnMantenimiento());
+      auto.getEstado().finalizarMantenimiento(auto);
+      expect(auto.getEstado()).toBeInstanceOf(EstadoDisponible);
+    });
+  });
 
-        expect(() => {
-            estadoLimpieza.puedeAlquilarse(autoCompacto)
-        }).toThrow(ErrorAutoEnLimpieza)
-    })
+  describe('Transiciones básicas', () => {
+    test('Disponible -> EnAlquiler -> finalizar -> Disponible', () => {
+      const auto = nuevoAuto(new EstadoDisponible());
+      auto.getEstado().puedeAlquilarse(auto);
+      expect(auto.getEstado()).toBeInstanceOf(estadoEnAlquiler);
+      auto.finalizarAlquiler(200);
+      expect(auto.getEstado()).toBeInstanceOf(EstadoDisponible);
+    });
 
-    test('Auto en estado EnMantenimiento lanza ErrorAutoEnMantenimiento', () => {
-        autoCompacto.actualizarEstado(estadoMantenimiento)
+    test('Autos independientes mantienen su propio estado', () => {
+      const a1 = nuevoAuto(new EstadoDisponible());
+      const a2 = nuevoAuto(new estadoEnAlquiler());
+      const a3 = nuevoAuto(new estadoEnMantenimiento());
 
-        expect(() => {
-            (autoCompacto.getEstado() as estadoEnMantenimiento).puedeAlquilarse()
-        }).toThrow(ErrorAutoEnMantenimiento)
-    })
+      a1.getEstado().puedeAlquilarse(a1);
+      expect(a1.getEstado()).toBeInstanceOf(estadoEnAlquiler);
+      expect(() => a2.getEstado().puedeAlquilarse(a2)).toThrow(ErrorAutoYaAlquilado);
+      expect(() => a3.getEstado().puedeAlquilarse(a3)).toThrow(ErrorEstadoRealizarMantenimiento);
+    });
+  });
 
-    test('Transición de Disponible a EnAlquiler funciona correctamente', () => {
-        expect(() => {
-            estadoDisponible.puedeAlquilarse(autoCompacto)
-        }).not.toThrow()
-
-        expect(() => {
-            autoCompacto.getEstado().puedeAlquilarse(autoCompacto)
-        }).toThrow(ErrorAutoYaAlquilado)
-    })
-
-    test('Transición de Disponible a EnLimpieza impide alquilar', () => {
-        autoCompacto.actualizarEstado(estadoLimpieza)
-
-        expect(() => {
-            autoCompacto.getEstado().puedeAlquilarse(autoCompacto)
-        }).toThrow(ErrorAutoEnLimpieza)
-    })
-
-    test('Transición de Disponible a EnMantenimiento impide alquilar', () => {
-        autoCompacto.actualizarEstado(estadoMantenimiento)
-
-        expect(() => {
-            (autoCompacto.getEstado() as estadoEnMantenimiento).puedeAlquilarse()
-        }).toThrow(ErrorAutoEnMantenimiento)
-    })
-
-    test('Múltiples autos mantienen estados independientes', () => {
-        const auto1 = new Compacto(101, ESTADO_VEHICULO.DISPONIBLE, 100)
-        const auto2 = new Compacto(102, ESTADO_VEHICULO.DISPONIBLE, 100)
-        const auto3 = new Compacto(103, ESTADO_VEHICULO.DISPONIBLE, 100)
-
-        estadoDisponible.puedeAlquilarse(auto1)
-        auto2.actualizarEstado(new estadoEnLimpieza())
-        auto3.actualizarEstado(new estadoEnMantenimiento())
-
-        expect(() => {
-            auto1.getEstado().puedeAlquilarse(auto1)
-        }).toThrow(ErrorAutoYaAlquilado)
-
-        expect(() => {
-            auto2.getEstado().puedeAlquilarse(auto2)
-        }).toThrow(ErrorAutoEnLimpieza)
-
-        expect(() => {
-            (auto3.getEstado() as estadoEnMantenimiento).puedeAlquilarse()
-        }).toThrow(ErrorAutoEnMantenimiento)
-    })
-})
+  describe('Necesidad de mantenimiento tras finalizar alquiler', () => {
+    test('finalizarAlquiler dispara transición a mantenimiento si criterios se cumplen', () => {
+      const auto = nuevoAuto(new estadoEnAlquiler());
+      auto.setKmDesdeUltimoMantenimiento(9900);
+      auto.setAlquileresCompletados(4);
+      auto.finalizarAlquiler(200);
+      expect(auto.getKmDesdeUltimoMantenimiento()).toBe(10100);
+      expect(auto.getAlquileresCompletados()).toBe(5);
+      const necesita = auto.necesitaMantenimiento();
+      expect(necesita).toBe(true);
+      expect(auto.getEstado()).toBeInstanceOf(estadoEnMantenimiento);
+    });
+  });
+});

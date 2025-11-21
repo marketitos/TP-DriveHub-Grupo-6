@@ -1,73 +1,98 @@
-import Compacto from '../src/models/Compacto';
-import Cliente from '../src/models/Cliente';
-import Reserva from '../src/models/Reserva';
-import ESTADO_VEHICULO from '../src/enums/ESTADO_VEHICULO';
-import Alta from '../src/models/Alta';
+import { mock } from 'jest-mock-extended';
+import Compacto from '../src/Auto/Compacto';
+import Reserva from '../src/Reserva';
+import { EstadoActual } from '../src/Estados/EstadoActual';
+import { estadoEnAlquiler } from '../src/Estados/estadoEnAlquiler';
+import { EstadoDisponible } from '../src/Estados/estadoDisponible';
+import { estadoEnMantenimiento } from '../src/Estados/estadoEnMantenimiento';
+import Alta from '../src/Temporadas/Alta';
 
-describe('Auto (vía Compacto)', () => {
-	test('getters y setters heredados de Auto funcionan correctamente', () => {
-	const compacto = new Compacto(123, ESTADO_VEHICULO.DISPONIBLE, 150);
+describe('Test Auto-Compacto', () => {
+  test('aplicarCargo sin exceso de km', () => {
+    const estado = mock<EstadoActual>();
+    const auto = new Compacto(1, estado, 100);
+    const reserva = mock<Reserva>();
+    reserva.getDias.mockReturnValue(2);
+    reserva.getKilometraje.mockReturnValue(200);
+    expect(auto.aplicarCargo(reserva)).toBe(0);
+  });
 
-		expect(compacto.getNroMatricula()).toBe(123);
-		expect(compacto.getTarifa()).toBe(150);
-		expect(compacto.getCargoAdicional()).toBe(0);
+  test('aplicarCargo con exceso de km', () => {
+    const estado = mock<EstadoActual>();
+    const auto = new Compacto(2, estado, 100);
+    const reserva = mock<Reserva>();
+    reserva.getDias.mockReturnValue(2);
+    reserva.getKilometraje.mockReturnValue(260);
+    expect(auto.aplicarCargo(reserva)).toBeCloseTo(9);
+  });
 
-		compacto.setTarifa(200);
-		compacto.setCargoAdicional(25);
+  test('calcularBase suma tarifa*días + cargo', () => {
+    const estado = mock<EstadoActual>();
+    const auto = new Compacto(3, estado, 100);
+    const reserva = mock<Reserva>();
+    reserva.getDias.mockReturnValue(2);
+    reserva.getKilometraje.mockReturnValue(260);
+    auto.setTarifa(100);
+    expect(auto.calcularBase(reserva)).toBeCloseTo(209);
+  });
 
-		expect(compacto.getTarifa()).toBe(200);
-		expect(compacto.getCargoAdicional()).toBe(25);
-	});
+  test('delegación puedeAlquilarse llama estado.puedeAlquilarse', () => {
+    const estado = mock<EstadoActual>();
+    const auto = new Compacto(4, estado, 150);
+    auto.puedeAlquilarse();
+    expect(estado.puedeAlquilarse).toHaveBeenCalledTimes(1);
+    expect(estado.puedeAlquilarse).toHaveBeenCalledWith(auto);
+  });
 
-	test('aplicarCargo devuelve 0 cuando kilometraje dentro del tope', () => {
-		const cliente = new Cliente(1, 'X');
-		const compacto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
-		const inicio = new Date(2025, 0, 1);
-		const fin = new Date(2025, 0, 2); // 2 días -> kmpordia = 100*2 = 200
-		const reserva = new Reserva(1, cliente, inicio, fin, compacto, 150, new Alta());
-		expect(compacto.aplicarCargo(reserva)).toBe(0);
-		expect(compacto.aplicarCargo(reserva)).toBe(0);
-	});
+  test('finalizarAlquiler en estadoEnAlquiler actualiza km, alquileres y estado', () => {
+    const inicial = new estadoEnAlquiler();
+    const auto = new Compacto(5, inicial, 120, 0, 5000, new Date(), 2);
+    auto.finalizarAlquiler(300);
+    expect(auto.getKmDesdeUltimoMantenimiento()).toBe(5300);
+    expect(auto.getAlquileresCompletados()).toBe(3);
+    expect(auto.getEstado()).toBeInstanceOf(EstadoDisponible);
+  });
 
-	test('aplicarCargo calcula cargo por exceso de km y calcularBase suma tarifa + cargo', () => {
-		const cliente = new Cliente(2, 'Y');
-	const compacto = new Compacto(2, ESTADO_VEHICULO.DISPONIBLE, 100);
-		const inicio = new Date(2025, 0, 1);
-		const fin = new Date(2025, 0, 2); // 2 días -> kmpordia = 200
-		const reserva = new Reserva(2, cliente, inicio, fin, compacto, 260, new Alta());
+  test('necesitaMantenimiento por km cambia a estadoEnMantenimiento', () => {
+    const estado = new EstadoDisponible();
+    const auto = new Compacto(6, estado, 100, 0, 10000, new Date(), 0);
+    expect(auto.necesitaMantenimiento()).toBe(true);
+    expect(auto.getEstado()).toBeInstanceOf(estadoEnMantenimiento);
+  });
 
-		// exceso = 260 - 200 = 60; cargo = 60 * 0.15 = 9
-		// exceso = 260 - 200 = 60; cargo = 60 * 0.15 = 9
-		expect(compacto.aplicarCargo(reserva)).toBeCloseTo(9);
+  test('necesitaMantenimiento por meses cambia a estadoEnMantenimiento', () => {
+    const fecha = new Date();
+    fecha.setMonth(fecha.getMonth() - 13);
+    const auto = new Compacto(7, new EstadoDisponible(), 100, 0, 0, fecha, 0);
+    expect(auto.necesitaMantenimiento()).toBe(true);
+    expect(auto.getEstado()).toBeInstanceOf(estadoEnMantenimiento);
+  });
 
-		// calcularBase = tarifa * dias + aplicarCargo = 100*2 + 9 = 209
-		expect(compacto.calcularBase(reserva)).toBeCloseTo(209);
-	});
+  test('necesitaMantenimiento por alquileres cambia a estadoEnMantenimiento', () => {
+    const auto = new Compacto(8, new EstadoDisponible(), 100, 0, 0, new Date(), 5);
+    expect(auto.necesitaMantenimiento()).toBe(true);
+    expect(auto.getEstado()).toBeInstanceOf(estadoEnMantenimiento);
+  });
 
-	test('setNroMatricula actualiza correctamente el número de matrícula', () => {
-		const compacto = new Compacto(123, ESTADO_VEHICULO.DISPONIBLE, 150);
-		compacto.setNroMatricula(456);
-		expect(compacto.getNroMatricula()).toBe(456);
-	});
+  test('realizarMantenimiento en EstadoDisponible resetea métricas', () => {
+    const auto = new Compacto(9, new EstadoDisponible(), 100, 0, 9000, new Date(), 3);
+    auto.realizarMantenimiento();
+    expect(auto.getKmDesdeUltimoMantenimiento()).toBe(0);
+    expect(auto.getAlquileresCompletados()).toBe(0);
+  });
 
-	test('getEstado retorna el estado del vehículo', () => {
-		const compacto = new Compacto(123, ESTADO_VEHICULO.DISPONIBLE, 150);
-		expect(compacto.getEstado()).toBe(ESTADO_VEHICULO.DISPONIBLE);
-	});
-
-	test('getters y setters de km, fecha mantenimiento y alquileres funcionan', () => {
-		const compacto = new Compacto(123, ESTADO_VEHICULO.DISPONIBLE, 150);
-		
-		expect(compacto.getKmDesdeUltimoMantenimiento()).toBe(0);
-		compacto.setKmDesdeUltimoMantenimiento(5000);
-		expect(compacto.getKmDesdeUltimoMantenimiento()).toBe(5000);
-
-		const nuevaFecha = new Date('2025-06-01');
-		compacto.setFechaUltMantenimiento(nuevaFecha);
-		expect(compacto.getFechaUltMantenimiento()).toBe(nuevaFecha);
-
-		expect(compacto.getAlquileresCompletados()).toBe(0);
-		compacto.setAlquileresCompletados(10);
-		expect(compacto.getAlquileresCompletados()).toBe(10);
-	});
+  test('costo total reserva integra tarifa ajustada y cálculo base', () => {
+    const estado = mock<EstadoActual>({
+      puedeAlquilarse: jest.fn(),
+      necesitaMantenimiento: jest.fn().mockReturnValue(false),
+      finalizarAlquiler: jest.fn(),
+      realizarMantenimiento: jest.fn(),
+      finalizarMantenimiento: jest.fn()
+    });
+    const auto = new Compacto(10, estado, 100);
+    const reservaReal = new Reserva(1, mock<any>(), new Date(2025,0,1), new Date(2025,0,2), auto, 260, new Alta());
+    const total = reservaReal.costoTotalReserva();
+    expect(total).toBeCloseTo(249);
+  });
 });
+ 

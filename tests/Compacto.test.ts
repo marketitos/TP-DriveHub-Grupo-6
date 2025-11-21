@@ -1,30 +1,150 @@
-import ESTADO_VEHICULO from "../src/enums/ESTADO_VEHICULO"
-import Cliente from "../src/models/Cliente"
-import Compacto from "../src/models/Compacto"
-import Reserva from "../src/models/Reserva"
-import Alta from "../src/models/Alta"
+import { mock } from 'jest-mock-extended';
+import Cliente from '../src/Utils/Cliente';
+import Compacto from '../src/Auto/Compacto';
+import { EstadoActual } from '../src/Estados/EstadoActual';
+import Reserva from '../src/Reserva';
+import Alta from '../src/Temporadas/Alta';
 
-describe("Tests clase compacto", ()=>{
-    let cliente1: Cliente;
-    let autocompacto: Compacto;
-    let fechaInicio: Date;
-    let fechaFin: Date;
-    let reserva: Reserva;
-    
-    beforeEach(() =>{
-        cliente1= new Cliente(46362499,"Marcos")
-        autocompacto=new Compacto(566, ESTADO_VEHICULO.DISPONIBLE,30)
-        fechaInicio = new Date("2025-10-01")
-        fechaFin = new Date("2025-10-05")
-        reserva = new Reserva(1, cliente1,fechaInicio,fechaFin,autocompacto,700, new Alta())
-    })
-    
-    test('Prueba metodo calcularBase()', () => {
-        expect(autocompacto.calcularBase(reserva)).toEqual(180)    
-    })
-    
-    test('Prueba metodo aplicarCargo()', () => {
-        let reserva = new Reserva(1, cliente1,fechaInicio,fechaFin,autocompacto,700, new Alta())
-        expect(autocompacto.aplicarCargo(reserva)).toEqual(30)    
-    })
-})
+const crearEstadoMock = () => mock<EstadoActual>();
+
+const crearReservaReal = (id: number, auto: Compacto, dias: number, km: number) => {
+  const inicio = new Date(2025, 0, 1);
+  const fin = new Date(2025, 0, 1 + (dias - 1));
+  return new Reserva(id, mock<any>(), inicio, fin, auto, km, new Alta());
+};
+
+const crearReservaMock = (dias: number, km: number) => {
+  const r = mock<Reserva>();
+  r.getDias.mockReturnValue(dias);
+  r.getKilometraje.mockReturnValue(km);
+  return r;
+};
+
+describe('Compacto Tests', () => {
+  test('aplicarCargo sin exceso (km == tope)', () => {
+    const auto = new Compacto(1, crearEstadoMock(), 100);
+    const reserva = crearReservaMock(3, 300);
+    expect(auto.aplicarCargo(reserva)).toBe(0);
+  });
+
+  test('aplicarCargo sin exceso (km < tope)', () => {
+    const auto = new Compacto(2, crearEstadoMock(), 100);
+    const reserva = crearReservaMock(2, 150);
+    expect(auto.aplicarCargo(reserva)).toBe(0);
+  });
+
+  test('aplicarCargo con exceso (cargo calculado)', () => {
+    const auto = new Compacto(3, crearEstadoMock(), 100);
+    const reserva = crearReservaMock(5, 700);
+    expect(auto.aplicarCargo(reserva)).toBeCloseTo(30);
+  });
+
+  test('calcularBase sin cargo', () => {
+    const auto = new Compacto(4, crearEstadoMock(), 80);
+    const reserva = crearReservaMock(4, 400);
+    expect(auto.calcularBase(reserva)).toBe(320);
+  });
+
+  test('calcularBase con cargo', () => {
+    const auto = new Compacto(5, crearEstadoMock(), 30);
+    const reserva = crearReservaMock(5, 700);
+    expect(auto.calcularBase(reserva)).toBe(180);
+  });
+
+  test('calcularBase refleja tarifa modificada antes del cálculo', () => {
+    const auto = new Compacto(6, crearEstadoMock(), 50);
+    auto.setTarifa(75);
+    const reserva = crearReservaMock(2, 250);
+    expect(auto.calcularBase(reserva)).toBeCloseTo(157.5);
+  });
+
+  test('aplicarCargo recalcula con cambios en mock de kilometraje', () => {
+    const auto = new Compacto(7, crearEstadoMock(), 40);
+    const reserva = crearReservaMock(2, 250);
+    expect(auto.aplicarCargo(reserva)).toBeCloseTo(7.5);
+    reserva.getKilometraje.mockReturnValue(210);
+    expect(auto.aplicarCargo(reserva)).toBeCloseTo(1.5);
+  });
+
+  test('integración calcularBase con Reserva real (exceso km)', () => {
+    const auto = new Compacto(8, crearEstadoMock(), 60);
+    const reservaReal = crearReservaReal(1, auto, 3, 400); // tope 300 exceso 100 cargo 15
+    expect(auto.calcularBase(reservaReal)).toBe(60 * 3 + 15);
+  });
+
+  test('integración aplicarCargo con Reserva real (sin exceso)', () => {
+    const auto = new Compacto(9, crearEstadoMock(), 90);
+    const reservaReal = crearReservaReal(2, auto, 2, 200);
+    expect(auto.aplicarCargo(reservaReal)).toBe(0);
+  });
+
+  test('calcularBase varía al cambiar días en el mock', () => {
+    const auto = new Compacto(10, crearEstadoMock(), 55);
+    const reserva = crearReservaMock(2, 260); // exceso 60 cargo 9
+    expect(auto.calcularBase(reserva)).toBeCloseTo(55 * 2 + 9);
+    reserva.getDias.mockReturnValue(3); // nuevo tope 300 exceso -40 (sin exceso)
+    reserva.getKilometraje.mockReturnValue(260);
+    expect(auto.calcularBase(reserva)).toBe(55 * 3);
+  });
+});
+
+describe('Compacto Tests', () => {
+  const crearAuto = (tarifa = 100) => {
+    const estado = mock<EstadoActual>();
+    return new Compacto(1, estado, tarifa);
+  };
+
+  const crearReservaMock = (dias: number, kilometraje: number) => {
+    const r = mock<Reserva>();
+    r.getDias.mockReturnValue(dias);
+    r.getKilometraje.mockReturnValue(kilometraje);
+    return r;
+  };
+
+  test('aplicarCargo sin exceso (kilometraje igual al tope)', () => {
+    const auto = crearAuto();
+    const reserva = crearReservaMock(3, 300); // tope = 100 * 3 = 300
+    expect(auto.aplicarCargo(reserva)).toBe(0);
+  });
+
+  test('aplicarCargo sin exceso (kilometraje menor al tope)', () => {
+    const auto = crearAuto();
+    const reserva = crearReservaMock(2, 150); // tope = 200
+    expect(auto.aplicarCargo(reserva)).toBe(0);
+  });
+
+  test('aplicarCargo con exceso (cargo calculado)', () => {
+    const auto = crearAuto();
+    const reserva = crearReservaMock(5, 700); // tope = 500, exceso = 200, cargo = 30
+    expect(auto.aplicarCargo(reserva)).toBeCloseTo(30);
+  });
+
+  test('calcularBase sin cargo (solo tarifa * días)', () => {
+    const auto = crearAuto(80);
+    const reserva = crearReservaMock(4, 400); // tope = 400, sin exceso
+    // base = 80 * 4 + 0 = 320
+    expect(auto.calcularBase(reserva)).toBe(320);
+  });
+
+  test('calcularBase con cargo (tarifa*días + cargo)', () => {
+    const auto = crearAuto(30);
+    const reserva = crearReservaMock(5, 700); // cargo = 30, tarifa*días = 150
+    expect(auto.calcularBase(reserva)).toBe(180);
+  });
+
+  test('calcularBase refleja cambio de tarifa antes del cálculo', () => {
+    const auto = crearAuto(50);
+    auto.setTarifa(75);
+    const reserva = crearReservaMock(2, 250); // tope=200, exceso=50, cargo=7.5
+    // base = 75*2 + 7.5 = 157.5
+    expect(auto.calcularBase(reserva)).toBeCloseTo(157.5);
+  });
+
+  test('aplicarCargo llamado múltiples veces usa siempre valores actuales del mock', () => {
+    const auto = crearAuto(40);
+    const reserva = crearReservaMock(2, 250); // tope=200 -> exceso=50 -> cargo=7.5
+    expect(auto.aplicarCargo(reserva)).toBeCloseTo(7.5);
+    reserva.getKilometraje.mockReturnValue(210); // exceso=10 -> 1.5
+    expect(auto.aplicarCargo(reserva)).toBeCloseTo(1.5);
+  });
+});
