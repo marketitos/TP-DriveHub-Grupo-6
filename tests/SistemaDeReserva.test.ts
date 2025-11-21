@@ -22,7 +22,11 @@ const crearTemporadaMock = () => {
 };
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 describe('SistemaDeReserva Test', () => {
+=======
+describe('SistemaDeReserva (mocks)', () => {
+>>>>>>> Stashed changes
 =======
 describe('SistemaDeReserva (mocks)', () => {
 >>>>>>> Stashed changes

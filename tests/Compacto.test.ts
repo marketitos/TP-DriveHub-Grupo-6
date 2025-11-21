@@ -21,7 +21,11 @@ const crearReservaMock = (dias: number, km: number) => {
 };
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 describe('Compacto Tests', () => {
+=======
+describe('Compacto', () => {
+>>>>>>> Stashed changes
 =======
 describe('Compacto', () => {
 >>>>>>> Stashed changes
@@ -93,7 +97,11 @@ describe('Compacto', () => {
 });
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 describe('Compacto Tests', () => {
+=======
+describe('Compacto (tests desde 0 con mocks)', () => {
+>>>>>>> Stashed changes
 =======
 describe('Compacto (tests desde 0 con mocks)', () => {
 >>>>>>> Stashed changes

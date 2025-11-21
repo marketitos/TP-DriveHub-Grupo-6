@@ -26,7 +26,11 @@ const reservaMock = (
 };
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 describe('Estadistica Tests', () => {
+=======
+describe('Estadistica con mocks', () => {
+>>>>>>> Stashed changes
 =======
 describe('Estadistica con mocks', () => {
 >>>>>>> Stashed changes

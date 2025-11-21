@@ -32,7 +32,11 @@ const crearTemporadaMock = (multiplicador: number) => {
 };
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 describe('Reserva Tests', () => {
+=======
+describe('Reserva (mocks)', () => {
+>>>>>>> Stashed changes
 =======
 describe('Reserva (mocks)', () => {
 >>>>>>> Stashed changes

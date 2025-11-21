@@ -15,7 +15,11 @@ const crearReservaMock = (dias: number, km: number) => {
 };
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 describe('SUV Tests', () => {
+=======
+describe('SUV (mocks)', () => {
+>>>>>>> Stashed changes
 =======
 describe('SUV (mocks)', () => {
 >>>>>>> Stashed changes

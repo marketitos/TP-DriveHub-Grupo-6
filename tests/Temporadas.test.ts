@@ -47,7 +47,11 @@ describe('calcularTarifaAjustada', () => {
 });
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 describe('setMultiplicador afecta cuenta', () => {
+=======
+describe('setMultiplicador afecta cálculo', () => {
+>>>>>>> Stashed changes
 =======
 describe('setMultiplicador afecta cálculo', () => {
 >>>>>>> Stashed changes
@@ -60,7 +64,11 @@ describe('setMultiplicador afecta cálculo', () => {
 });
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 describe('Temporadas Tests', () => {
+=======
+describe('Integración simple con Auto y Reserva mock', () => {
+>>>>>>> Stashed changes
 =======
 describe('Integración simple con Auto y Reserva mock', () => {
 >>>>>>> Stashed changes
@@ -98,7 +106,10 @@ describe('Integración simple con Auto y Reserva mock', () => {
     expect(t2).toBe(100);
   });
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 });
 
 describe('Polimorfismo básico', () => {
@@ -106,5 +117,8 @@ describe('Polimorfismo básico', () => {
     const arr: Temporadas[] = [new Alta(), new Media(), new Baja()];
     expect(arr.every(t => t instanceof Temporadas)).toBe(true);
   });
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 });

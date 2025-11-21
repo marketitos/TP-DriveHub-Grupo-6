@@ -7,7 +7,11 @@ import { ErrorAutoEnMantenimiento } from '../src/Errores/errorEstadoEnMantenimie
 import { ErrorEstadoRealizarMantenimiento } from '../src/Errores/errorEstadoRealizarMantenimiento';
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 describe('Patrón State de Auto (Compacto)', () => {
+=======
+describe('Patrón State de Auto (Compacto) sin estado de limpieza', () => {
+>>>>>>> Stashed changes
 =======
 describe('Patrón State de Auto (Compacto) sin estado de limpieza', () => {
 >>>>>>> Stashed changes
