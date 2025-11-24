@@ -1,101 +1,188 @@
-import Reserva from '../src/models/Reserva';
-import Cliente from '../src/models/Cliente';
-import Compacto from '../src/models/Compacto';
-import ESTADO_VEHICULO from '../src/enums/ESTADO_VEHICULO';
-import Alta from '../src/models/Alta';
-import Media from '../src/models/Media';
+import { mock } from 'jest-mock-extended';
+import Reserva from '../src/Reserva';
+import Cliente from '../src/Utils/Cliente';
+import { estadoEnMantenimiento } from '../src/Estados/estadoEnMantenimiento';
+import Auto from '../src/Auto/Auto';
+import Temporadas from '../src/Temporadas/Temporadas';
 
-describe('Reserva', () => {
-  test('constructor y getters/setters funcionan correctamente', () => {
-    const cliente = new Cliente(5, 'Test');
-    const auto = new Compacto(111, ESTADO_VEHICULO.DISPONIBLE, 100);
+const crearAutoMock = (tarifaInicial: number) => {
+  const auto = mock<Auto>();
+  let tarifa = tarifaInicial;
+
+  auto.getTarifa.mockImplementation(() => tarifa);
+  auto.setTarifa.mockImplementation((nueva) => {
+    tarifa = nueva;
+  });
+  auto.calcularBase.mockImplementation((reserva: Reserva) => {
+    return tarifa * reserva.getDias() + 10;
+  });
+  auto.finalizarAlquiler.mockImplementation(() => {});
+  auto.necesitaMantenimiento.mockReturnValue(false);
+  auto.actualizarEstado.mockImplementation(() => {});
+
+  return auto;
+};
+
+const crearTemporadaMock = (multiplicador: number) => {
+  const temporada = mock<Temporadas>();
+  temporada.getMultiplicador.mockReturnValue(multiplicador);
+  temporada.calcularTarifaAjustada.mockImplementation(
+    (tarifaBase: number) => tarifaBase * multiplicador
+  );
+  return temporada;
+};
+
+describe('Reserva Tests', () => {
+  test('constructor asigna propiedades y getters retornan valores', () => {
+    const cliente = new Cliente(1, 'Cliente X');
+    const auto = crearAutoMock(100);
+    const temporada = crearTemporadaMock(1.2);
     const inicio = new Date(2025, 0, 1);
-    const fin = new Date(2025, 0, 1);
-    const reserva = new Reserva(10, cliente, inicio, fin, auto, 50, new Alta());
+    const fin = new Date(2025, 0, 3);
+    const reserva = new Reserva(10, cliente, inicio, fin, auto, 250, temporada);
 
     expect(reserva.getIdReserva()).toBe(10);
     expect(reserva.getCliente()).toBe(cliente);
     expect(reserva.getFechaInicio()).toBe(inicio);
     expect(reserva.getFechaFin()).toBe(fin);
     expect(reserva.getAuto()).toBe(auto);
-    expect(reserva.getKilometraje()).toBe(50);
-
-    reserva.setKilometraje(80);
-    expect(reserva.getKilometraje()).toBe(80);
-
-    const nuevoFin = new Date(2025, 0, 3);
-    reserva.setFechaFin(nuevoFin);
-    expect(reserva.getFechaFin()).toBe(nuevoFin);
+    expect(reserva.getKilometraje()).toBe(250);
+    expect(reserva.getTemporada()).toBe(temporada);
   });
 
-  test('getDias calcula correctamente (incluye ambos días)', () => {
-    const cliente = new Cliente(1, 'A');
-    const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
-    const inicio = new Date(2025, 0, 1);
-    let fin = new Date(2025, 0, 1);
-    fin = new Date(2025, 0, 31);
-    const r3 = new Reserva(3, cliente, inicio, fin, auto, 0, new Alta());
-
-    expect(r3.getDias()).toBe(31);
+  test('getDias (mismo día) retorna 1', () => {
+    const reserva = new Reserva(
+      1,
+      new Cliente(2, 'A'),
+      new Date(2025, 0, 5),
+      new Date(2025, 0, 5),
+      crearAutoMock(100),
+      0,
+      crearTemporadaMock(1)
+    );
+    expect(reserva.getDias()).toBe(1);
   });
 
-  test('costoTotalReserva calcula correctamente con temporada Alta', () => {
-    const cliente = new Cliente(1, 'A');
-    const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
+  test('getDias (rango de varios días) incluye ambos extremos', () => {
+    const reserva = new Reserva(
+      2,
+      new Cliente(3, 'B'),
+      new Date(2025, 0, 1),
+      new Date(2025, 0, 10),
+      crearAutoMock(50),
+      0,
+      crearTemporadaMock(1)
+    );
+    expect(reserva.getDias()).toBe(10);
+  });
+
+  test('obtenerTarifaDiaria aplica multiplicador de temporada', () => {
+    const auto = crearAutoMock(200);
+    const temporada = crearTemporadaMock(1.2);
+    const reserva = new Reserva(3, new Cliente(4, 'C'), new Date(), new Date(), auto, 0, temporada);
+    expect(reserva.obtenerTarifaDiaria()).toBe(240);
+    expect(temporada.calcularTarifaAjustada).toHaveBeenCalledWith(200);
+  });
+
+  test('costoTotalReserva ajusta tarifa del auto antes de calcular base', () => {
+    const auto = crearAutoMock(100);
+    const temporada = crearTemporadaMock(1.2);
     const inicio = new Date(2025, 0, 1);
     const fin = new Date(2025, 0, 2);
-    const reserva = new Reserva(1, cliente, inicio, fin, auto, 100, new Alta());
-    // Tarifa base: 100, Temporada Alta: +20% = 120, Días: 2, Costo: 120*2 = 240
-    expect(reserva.costoTotalReserva()).toBe(240);
+    const reserva = new Reserva(4, new Cliente(5, 'D'), inicio, fin, auto, 0, temporada);
+
+    const total = reserva.costoTotalReserva();
+    expect(total).toBe(250); // 120 * 2 + 10
+    expect(auto.setTarifa).toHaveBeenCalledWith(120);
+    expect(auto.calcularBase).toHaveBeenCalledWith(reserva);
   });
 
-  test('setters de Reserva funcionan correctamente', () => {
-    const cliente = new Cliente(1, 'A');
-    const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
-    const inicio = new Date(2025, 0, 1);
-    const fin = new Date(2025, 0, 2);
-    const reserva = new Reserva(1, cliente, inicio, fin, auto, 100, new Alta());
+  test('costoTotalReserva segunda llamada usa tarifa ya modificada y la vuelve a ajustar', () => {
+    const auto = crearAutoMock(80);
+    const temporada = crearTemporadaMock(1.5);
+    const reserva = new Reserva(
+      5,
+      new Cliente(6, 'E'),
+      new Date(2025, 0, 1),
+      new Date(2025, 0, 3),
+      auto,
+      0,
+      temporada
+    );
 
+    const t1 = reserva.costoTotalReserva(); // 120 * 3 + 10 = 370
+    const t2 = reserva.costoTotalReserva(); // 180 * 3 + 10 = 550
+    expect(t1).toBe(370);
+    expect(t2).toBe(550);
+    expect(auto.setTarifa).toHaveBeenNthCalledWith(1, 120);
+    expect(auto.setTarifa).toHaveBeenNthCalledWith(2, 180);
+  });
+
+  test('finalizarReserva llama finalizarAlquiler con kilometraje', () => {
+    const auto = crearAutoMock(100);
+    auto.necesitaMantenimiento.mockReturnValue(false);
+    const reserva = new Reserva(
+      6,
+      new Cliente(7, 'F'),
+      new Date(),
+      new Date(),
+      auto,
+      345,
+      crearTemporadaMock(1)
+    );
+    reserva.finalizarReserva();
+    expect(auto.finalizarAlquiler).toHaveBeenCalledWith(345);
+    expect(auto.actualizarEstado).not.toHaveBeenCalled();
+  });
+
+  test('finalizarReserva actualiza estado si necesita mantenimiento', () => {
+    const auto = crearAutoMock(100);
+    auto.necesitaMantenimiento.mockReturnValue(true);
+    const reserva = new Reserva(
+      7,
+      new Cliente(8, 'G'),
+      new Date(),
+      new Date(),
+      auto,
+      100,
+      crearTemporadaMock(1)
+    );
+    reserva.finalizarReserva();
+    expect(auto.finalizarAlquiler).toHaveBeenCalledWith(100);
+    expect(auto.actualizarEstado).toHaveBeenCalledTimes(1);
+    const argumentoEstado = auto.actualizarEstado.mock.calls[0][0];
+    expect(argumentoEstado).toBeInstanceOf(estadoEnMantenimiento);
+  });
+
+  test('setters modifican estado interno', () => {
+    const cliente = new Cliente(9, 'H');
+    const auto = crearAutoMock(100);
+    const reserva = new Reserva(
+      8,
+      cliente,
+      new Date(2025, 0, 1),
+      new Date(2025, 0, 2),
+      auto,
+      10,
+      crearTemporadaMock(1)
+    );
+
+    const cliente2 = new Cliente(10, 'I');
+    reserva.setCliente(cliente2);
     reserva.setIdReserva(99);
+    const nuevoInicio = new Date(2025, 1, 1);
+    const nuevoFin = new Date(2025, 1, 5);
+    reserva.setFechaInicio(nuevoInicio);
+    reserva.setFechaFin(nuevoFin);
+    reserva.setKilometraje(777);
+    const temporada2 = crearTemporadaMock(2);
+    reserva.setTemporada(temporada2);
+
+    expect(reserva.getCliente()).toBe(cliente2);
     expect(reserva.getIdReserva()).toBe(99);
-
-    const nuevoCliente = new Cliente(2, 'B');
-    reserva.setCliente(nuevoCliente);
-    expect(reserva.getCliente()).toBe(nuevoCliente);
-
-    const nuevaFechaInicio = new Date(2025, 1, 1);
-    reserva.setFechaInicio(nuevaFechaInicio);
-    expect(reserva.getFechaInicio()).toBe(nuevaFechaInicio);
-
-    const nuevoAuto = new Compacto(2, ESTADO_VEHICULO.DISPONIBLE, 150);
-    reserva.setAuto(nuevoAuto);
-    expect(reserva.getAuto()).toBe(nuevoAuto);
-  });
-
-  test('getTemporada y setTemporada funcionan correctamente', () => {
-    const cliente = new Cliente(1, 'A');
-    const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
-    const inicio = new Date(2025, 0, 1);
-    const fin = new Date(2025, 0, 2);
-    const alta = new Alta();
-    const reserva = new Reserva(1, cliente, inicio, fin, auto, 100, alta);
-
-    expect(reserva.getTemporada()).toBe(alta);
-
-    const media = new Media();
-    reserva.setTemporada(media);
-    expect(reserva.getTemporada()).toBe(media);
-  });
-
-  test('obtenerTarifaDiaria retorna tarifa ajustada por temporada', () => {
-    const cliente = new Cliente(1, 'A');
-    const auto = new Compacto(1, ESTADO_VEHICULO.DISPONIBLE, 100);
-    const inicio = new Date(2025, 0, 1);
-    const fin = new Date(2025, 0, 2);
-    const alta = new Alta();
-    const reserva = new Reserva(1, cliente, inicio, fin, auto, 100, alta);
-
-    // Tarifa base 100 * 1.2 (Alta) = 120
-    expect(reserva.obtenerTarifaDiaria()).toBe(120);
+    expect(reserva.getFechaInicio()).toBe(nuevoInicio);
+    expect(reserva.getFechaFin()).toBe(nuevoFin);
+    expect(reserva.getKilometraje()).toBe(777);
+    expect(reserva.getTemporada()).toBe(temporada2);
   });
 });
