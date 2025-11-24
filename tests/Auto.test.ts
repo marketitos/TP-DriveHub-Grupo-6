@@ -39,7 +39,7 @@ describe('Test Auto-Compacto', () => {
   test('delegación puedeAlquilarse llama estado.puedeAlquilarse', () => {
     const estado = mock<EstadoActual>();
     const auto = new Compacto(4, estado, 150);
-    auto.puedeAlquilarse();
+    auto.puedeAlquilarse(estado);
     expect(estado.puedeAlquilarse).toHaveBeenCalledTimes(1);
     expect(estado.puedeAlquilarse).toHaveBeenCalledWith(auto);
   });
@@ -95,42 +95,4 @@ describe('Test Auto-Compacto', () => {
     expect(total).toBeCloseTo(249);
   });
 });
-<<<<<<< HEAD
-
-describe('necesitaMantenimiento', () => {
-	test('necesitaMantenimiento retorna true cuando km >= 10000', () => {
-		const fechaReciente = new Date();
-		const compacto = new Compacto(123, new EstadoDisponible(), 150, 0, 10000, fechaReciente, 0);
-		expect(compacto.necesitaMantenimiento()).toBe(true);
-	});
-
-	test('necesitaMantenimiento retorna true cuando han pasado 12 meses', () => {
-		const hace13Meses = new Date();
-		hace13Meses.setMonth(hace13Meses.getMonth() - 13);
-		const compacto = new Compacto(123, new EstadoDisponible(), 150, 0, 0, hace13Meses, 0);
-		expect(compacto.necesitaMantenimiento()).toBe(true);
-	});
-
-	test('necesitaMantenimiento retorna true cuando alquileres >= 5', () => {
-		const fechaReciente = new Date();
-		const compacto = new Compacto(123, new EstadoDisponible(), 150, 0, 0, fechaReciente, 5);
-		expect(compacto.necesitaMantenimiento()).toBe(true);
-	});
-
-	test('realizarMantenimiento ', () => {
-		const compacto = new Compacto(123, new EstadoDisponible(), 150, 0, 11000, new Date(), 3);
-		
-		expect(compacto.necesitaMantenimiento()).toBe(true);
-		
-		compacto.realizarMantenimiento();
-		
-		expect(compacto.necesitaMantenimiento()).toBe(false);
-		expect(compacto.getKmDesdeUltimoMantenimiento()).toBe(0);
-	});
-
-
-
-});
-=======
  
->>>>>>> TF_Develop

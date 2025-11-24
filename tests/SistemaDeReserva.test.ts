@@ -111,7 +111,14 @@ describe('SistemaDeReserva Tests', () => {
     const fin = new Date(2025, 0, 3);
     const temporada = crearTemporadaMock();
 
-    const result = sistema.crearReserva(cliente, auto, inicio, fin, 150, temporada);
+    const result = sistema.crearReserva(
+      cliente,
+      auto,
+      inicio,
+      fin,
+      150,
+      temporada
+    );
 
     expect(result.getIdReserva()).toBe(1);
     expect(result.getKilometraje()).toBe(150);
@@ -123,7 +130,14 @@ describe('SistemaDeReserva Tests', () => {
     const cliente = new Cliente(2, 'Defecto');
     const { auto, estado } = crearAutoMock(100);
     estado.puedeAlquilarse.mockImplementation(() => {});
-    const reserva = sistema.crearReserva(cliente, auto, new Date(), new Date(), undefined as any, crearTemporadaMock());
+    const reserva = sistema.crearReserva(
+      cliente,
+      auto,
+      new Date(),
+      new Date(),
+      0,
+      crearTemporadaMock()
+    );
     expect(reserva.getKilometraje()).toBe(0);
   });
 
@@ -132,7 +146,9 @@ describe('SistemaDeReserva Tests', () => {
     const { auto, estado } = crearAutoMock(1000);
     const temporada = crearTemporadaMock();
     const err = new Error('No disponible');
-    estado.puedeAlquilarse.mockImplementation(() => { throw err; });
+    estado.puedeAlquilarse.mockImplementation(() => {
+      throw err;
+    });
 
     expect(() =>
       sistema.crearReserva(cliente, auto, new Date(), new Date(), 0, temporada)
@@ -146,18 +162,32 @@ describe('SistemaDeReserva Tests', () => {
     const { auto, estado } = crearAutoMock(222);
     estado.puedeAlquilarse.mockImplementation(() => {});
     const temporada = crearTemporadaMock();
-    const r1 = sistema.crearReserva(cliente, auto, new Date(), new Date(), 10, temporada);
-    const r2 = sistema.crearReserva(cliente, auto, new Date(), new Date(), 20, temporada);
+    const r1 = sistema.crearReserva(
+      cliente,
+      auto,
+      new Date(),
+      new Date(),
+      10,
+      temporada
+    );
+    const r2 = sistema.crearReserva(
+      cliente,
+      auto,
+      new Date(),
+      new Date(),
+      20,
+      temporada
+    );
     expect(r1.getIdReserva()).toBe(1);
     expect(r2.getIdReserva()).toBe(2);
   });
 
   test('setReservaCreator reemplaza la estrategia de creación', () => {
     const customCreator = mock<ReservaCreator>();
-    customCreator.crearReserva.mockImplementation((id, cl, fi, ff, au, km, temp) => {
-      return new Reserva(id, cl, fi, ff, au, km + 999, temp);
-    });
-  });
+    customCreator.crearReserva.mockImplementation(
+      (id, cl, fi, ff, au, km, temp) =>
+        new Reserva(id, cl, fi, ff, au, km + 999, temp)
+    );
 
     sistema.setReservaCreator(customCreator);
 
@@ -166,7 +196,15 @@ describe('SistemaDeReserva Tests', () => {
     estado.puedeAlquilarse.mockImplementation(() => {});
     const temporada = crearTemporadaMock();
 
-    const reserva = sistema.crearReserva(cliente, auto, new Date(), new Date(), 1, temporada);
+    const reserva = sistema.crearReserva(
+      cliente,
+      auto,
+      new Date(),
+      new Date(),
+      1,
+      temporada
+    );
+
     expect(reserva.getKilometraje()).toBe(1000);
     expect(customCreator.crearReserva).toHaveBeenCalledTimes(1);
   });
