@@ -39,7 +39,7 @@ describe('Test Auto-Compacto', () => {
   test('delegación puedeAlquilarse llama estado.puedeAlquilarse', () => {
     const estado = mock<EstadoActual>();
     const auto = new Compacto(4, estado, 150);
-    auto.puedeAlquilarse(estado);
+    auto.puedeAlquilarse();
     expect(estado.puedeAlquilarse).toHaveBeenCalledTimes(1);
     expect(estado.puedeAlquilarse).toHaveBeenCalledWith(auto);
   });

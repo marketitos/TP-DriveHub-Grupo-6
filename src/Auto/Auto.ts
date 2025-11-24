@@ -120,55 +120,6 @@ abstract class Auto {
         this.alquileresCompletados = value;
     }
 
-<<<<<<< HEAD:src/models/Auto.ts
-    puedeAlquilarse(e:EstadoActual): void {
-        this.actualizarEstado(e);
-    }
-
-    /**
-     * Verifica si el vehículo necesita mantenimiento según los siguientes criterios:
-     * - Ha superado los 10.000 km desde su último mantenimiento
-     * - Han pasado 12 meses desde su último mantenimiento
-     * - Ha completado 5 alquileres desde el último mantenimiento
-     * @returns {boolean} true si necesita mantenimiento, false en caso contrario
-     */
-    public necesitaMantenimiento(): boolean {
-        let necesitaMant=false;
-        if (this._kmDesdeUltimoMantenimiento >= 10000) {
-            necesitaMant= true
-        }
-        const hoy = new Date();
-        const mesesDesdeMantenimiento = (hoy.getTime() - this._fechaUltMantenimiento.getTime()) / (1000 * 60 * 60 * 24 * 30);
-        if (mesesDesdeMantenimiento >= 12) {
-           necesitaMant = true
-        }
-      
-        if (this.alquileresCompletados >= 5) {
-            necesitaMant = true
-        }
-
-        return necesitaMant;
-    }
-
-    /**
-     * Registra la finalización de un alquiler, actualiza los contadores
-     * y verifica automáticamente si requiere mantenimiento
-     * @param {number} kmRecorridos - Kilómetros recorridos durante el alquiler
-     */
-    public finalizarAlquiler(kmRecorridos: number): void {
-        this._kmDesdeUltimoMantenimiento += kmRecorridos;
-        this.alquileresCompletados++;
-    }
-
-    /**
-     * Realiza el mantenimiento del vehículo, resetea los contadores
-     * y actualiza la fecha del último mantenimiento
-     */
-    public realizarMantenimiento(): void {
-        this._kmDesdeUltimoMantenimiento = 0;
-        this.alquileresCompletados = 0;
-        this._fechaUltMantenimiento = new Date();
-=======
     puedeAlquilarse(): void {
         this._estado.puedeAlquilarse(this);
     }
@@ -183,7 +134,6 @@ abstract class Auto {
     
     public realizarMantenimiento(): void {
         this._estado.realizarMantenimiento(this);
->>>>>>> TF_Develop:src/Auto/Auto.ts
     }
 
 }
