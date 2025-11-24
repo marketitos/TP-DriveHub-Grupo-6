@@ -17,7 +17,7 @@
     "prebuild": "npm run clean",
     "lint-fix": "npx eslint ./src --fix",
     "doc": "jsdoc -c jsdoc.json",
-    "doc1": "typedoc --entryPointStrategy expand --out docs src/models"
+    "doc1": "typedoc --entryPointStrategy expand --out docs src/"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",

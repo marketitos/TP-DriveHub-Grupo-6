@@ -11,7 +11,7 @@ class Compacto extends Auto {
     /**
      * Crea una instancia de Compacto.
      * @param {number} nroMatricula - Número de matrícula del vehículo.
-     * @param {EstadoActual} estado - Estado inicial del vehículo (usar el Patron State `EstadoActual`).
+     * @param {EstadoActual} estado - Estado inicial del vehículo
      * @param {number} tarifa - Tarifa diaria base del vehículo.
      * @param {number} cargoAdicional - Cargo adicional por defecto (opcional, default 0).
      * @param {number} kmDesdeUltimoMantenimiento - Kilómetros desde último mantenimiento (opcional, default 0).
