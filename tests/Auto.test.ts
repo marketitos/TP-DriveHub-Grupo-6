@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-import Compacto from '../src/models/Compacto';
-import Cliente from '../src/models/Cliente';
-import Reserva from '../src/models/Reserva';
-import ESTADO_VEHICULO from '../src/enums/ESTADO_VEHICULO';
-import Alta from '../src/models/Alta';
-import { EstadoDisponible } from '../src/models/estadoDisponible';
-=======
 import { mock } from 'jest-mock-extended';
 import Compacto from '../src/Auto/Compacto';
 import Reserva from '../src/Reserva';
@@ -14,7 +6,6 @@ import { estadoEnAlquiler } from '../src/Estados/estadoEnAlquiler';
 import { EstadoDisponible } from '../src/Estados/estadoDisponible';
 import { estadoEnMantenimiento } from '../src/Estados/estadoEnMantenimiento';
 import Alta from '../src/Temporadas/Alta';
->>>>>>> TF_Develop
 
 describe('Test Auto-Compacto', () => {
   test('aplicarCargo sin exceso de km', () => {

@@ -14,22 +14,12 @@ const crearReservaMock = (dias: number, km: number) => {
   return r;
 };
 
-<<<<<<< HEAD
-    test('Prueba metodo aplicarCargo()', () => {
-
-        expect(autoSUV.aplicarCargo(reserva)).toEqual(200)
-    })
-    test('Prueba metodo getCargoFijo', () => {
-      expect(autoSUV.getCargoFijo()).toEqual(10)
-    })
-=======
 describe('SUV Tests', () => {
   test('aplicarCargo sin exceso (km <= 500) = cargoFijo * días', () => {
     const suv = new SUV(1, crearEstado(), 100, 10, 0, new Date(), 0);
     const reserva = crearReservaMock(4, 500);
     expect(suv.aplicarCargo(reserva)).toBe(40);
   });
->>>>>>> TF_Develop
 
   test('aplicarCargo con exceso (km > 500)', () => {
     const suv = new SUV(2, crearEstado(), 80, 15, 0, new Date(), 0);

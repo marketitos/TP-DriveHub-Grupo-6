@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import SistemaDeReserva from '../src/models/SistemaDeReserva';
-import Cliente from '../src/models/Cliente';
-import SUV from '../src/models/SUV';
-import Reserva from '../src/models/Reserva';
-import ESTADO_VEHICULO from '../src/enums/ESTADO_VEHICULO';
-import Alta from '../src/models/Alta';
-import { EstadoDisponible } from '../src/models/estadoDisponible';
-import { estadoEnMantenimiento } from '../src/models/estadoEnMantenimiento';
-import Compacto from '../src/models/Compacto';
-=======
 import { mock } from 'jest-mock-extended';
 import SistemaDeReserva from '../src/SistemaDeReserva';
 import Cliente from '../src/Utils/Cliente';
@@ -17,7 +6,6 @@ import Auto from '../src/Auto/Auto';
 import Temporadas from '../src/Temporadas/Temporadas';
 import { EstadoActual } from '../src/Estados/EstadoActual';
 import { ReservaCreator } from '../src/ReservaFactory';
->>>>>>> TF_Develop
 
 const crearAutoMock = (matricula: number) => {
   const estado = mock<EstadoActual>();
@@ -38,13 +26,6 @@ describe('SistemaDeReserva Tests', () => {
 
   beforeEach(() => {
     sistema = new SistemaDeReserva();
-<<<<<<< HEAD
-    cliente = new Cliente(1, 'Juan Perez');
-    suv = new SUV(123, new EstadoDisponible(), 50, 10, 0, new Date('2023-01-01'), 0);
-    fechaInicio = new Date('2024-01-01');
-    fechaFin = new Date('2024-01-10');
-=======
->>>>>>> TF_Develop
   });
 
   test('constructor inicia arrays vacíos', () => {
@@ -82,13 +63,6 @@ describe('SistemaDeReserva Tests', () => {
     expect(sistema.getClientes()[0]).toBe(c2);
   });
 
-<<<<<<< HEAD
-  describe('Métodos varios', () => {
-    test('getters deben retornar arrays', () => {
-      expect(Array.isArray(sistema.getAutos())).toBe(true);
-      expect(Array.isArray(sistema.getClientes())).toBe(true);
-      expect(Array.isArray(sistema.getReservas())).toBe(true);
-=======
   test('eliminarCliente inexistente no modifica lista', () => {
     const c1 = new Cliente(1, 'Solo');
     sistema.agregarCliente(c1);
@@ -182,28 +156,9 @@ describe('SistemaDeReserva Tests', () => {
     const customCreator = mock<ReservaCreator>();
     customCreator.crearReserva.mockImplementation((id, cl, fi, ff, au, km, temp) => {
       return new Reserva(id, cl, fi, ff, au, km + 999, temp);
->>>>>>> TF_Develop
     });
   });
 
-<<<<<<< HEAD
-  describe('Mantenimiento', () => {
-    test('finalizarAlquiler cambia auto a mantenimiento cuando completa 5 alquileres', () => {
-      const auto = new Compacto(456, new EstadoDisponible(), 100, 0, 0, new Date(), 4);
-      sistema.agregarAuto(auto);
-      
- 
-      expect(auto.getAlquileresCompletados()).toBe(4);
-      expect(auto.necesitaMantenimiento()).toBe(false);
-      expect(auto.getEstado()).toBeInstanceOf(EstadoDisponible);
-
-      sistema.finalizarAlquiler(auto, 500);
-      
-      expect(auto.getAlquileresCompletados()).toBe(5);
-      expect(auto.necesitaMantenimiento()).toBe(true);
-      expect(auto.getEstado()).toBeInstanceOf(estadoEnMantenimiento);
-    });
-=======
     sistema.setReservaCreator(customCreator);
 
     const cliente = new Cliente(77, 'Factory');
@@ -214,6 +169,5 @@ describe('SistemaDeReserva Tests', () => {
     const reserva = sistema.crearReserva(cliente, auto, new Date(), new Date(), 1, temporada);
     expect(reserva.getKilometraje()).toBe(1000);
     expect(customCreator.crearReserva).toHaveBeenCalledTimes(1);
->>>>>>> TF_Develop
   });
 });

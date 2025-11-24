@@ -20,11 +20,7 @@ class Compacto extends Auto {
      */
     constructor(
         nroMatricula: number, 
-<<<<<<< HEAD:src/models/Compacto.ts
-        estado: any, 
-=======
         estado: EstadoActual, 
->>>>>>> TF_Develop:src/Auto/Compacto.ts
         tarifa: number,
         cargoAdicional: number = 0,
         kmDesdeUltimoMantenimiento: number = 0,
